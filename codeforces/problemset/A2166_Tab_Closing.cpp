@@ -2,9 +2,8 @@
 using namespace std;
 
 void solve (){
-    long long a,b,c;
+    unsigned long long a,b,c;
     cin >> a >> b >> c;
-
     cout << ((b >= a || (b * c <= a))? 1:2) << "\n";
 }
 

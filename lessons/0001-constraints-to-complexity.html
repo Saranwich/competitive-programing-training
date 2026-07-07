@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 1 — Constraints → Complexity</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<p class="kicker">Lesson 1 of the 10-day plan · Day 1</p>
+<h1>Read the Constraints First</h1>
+<p class="subtitle">The 60-second habit that tells you which algorithm a problem wants — before you think about the algorithm at all.</p>
+
+<h2>Why this is lesson 1</h2>
+<p>At an ICPC regional you have 5 hours and ~10 problems. The strongest teams don't start by "thinking about the problem" — they start by reading the line <code>1 ≤ n ≤ 2·10⁵</code>, because that line <em>tells them the answer's shape</em>. If n is 2·10⁵, the intended solution is O(n) or O(n log n); every clever O(n²) idea is a trap you can now skip without wasting 30 minutes on it.</p>
+
+<h2>The one rule</h2>
+<div class="callout">
+<strong>The 10⁸ rule.</strong> The judge executes roughly 10⁷–10⁸ simple operations per second. Plug the <em>maximum</em> n into a candidate complexity. Under ~10⁸ total → fast enough. Over → don't even code it.
+</div>
+
+<p>That single rule generates this whole table (memorize it — it's your problem-triage system):</p>
+
+<table>
+<tr><th>If max n is…</th><th>You need…</th><th>Which usually means…</th></tr>
+<tr><td>≤ 10</td><td>O(n!)</td><td>brute-force permutations</td></tr>
+<tr><td>≤ 20</td><td>O(2ⁿ)</td><td>try every subset</td></tr>
+<tr><td>≤ 500</td><td>O(n³)</td><td>triple nested loop</td></tr>
+<tr><td>≤ 5 000</td><td>O(n²)</td><td>double loop, simple DP</td></tr>
+<tr><td>≤ 10⁶</td><td>O(n log n)</td><td>sort it, binary search, heap</td></tr>
+<tr><td>≤ 10⁸</td><td>O(n)</td><td>one pass, two pointers, prefix sums</td></tr>
+<tr><td>10⁹ or 10¹⁸</td><td>O(log n) or O(1)</td><td>binary search on answer, math</td></tr>
+</table>
+
+<p>Worked example: a problem says <code>n ≤ 5000</code> and asks for the best pair of items. A double loop over all pairs is n² = 2.5·10⁷ operations — comfortably under 10⁸. <strong>Code the dumb double loop.</strong> The same problem with <code>n ≤ 2·10⁵</code>? n² = 4·10¹⁰ — impossible. Now you know, before writing anything, that the problem is really asking "find the best pair <em>without</em> checking all pairs" — sort it or use a data structure.</p>
+
+<h2>Two traps that cost real penalties</h2>
+<ul>
+<li><strong>"Sum over all test cases":</strong> when you see t ≤ 10⁴ test cases and <em>"the sum of n over all test cases ≤ 2·10⁵"</em>, budget against the sum (2·10⁵), not t·n. Nearly every Codeforces problem you've solved uses this phrasing.</li>
+<li><strong>Overflow is a complexity cousin:</strong> the same constraint line tells you value sizes. n ≤ 10⁵ numbers, each ≤ 10⁹ → their sum hits 10¹⁴, which does not fit in <code>int</code>. Reading constraints = also deciding <code>long long</code>.</li>
+</ul>
+
+<h2>Check yourself</h2>
+<p>No notes, no scrolling up. Answer from memory — the effort of retrieval is what makes it stick.</p>
+<div class="quiz" id="quiz1"></div>
+
+<h2>Now make it a habit (20 min)</h2>
+<p>Solve <a href="https://cses.fi/problemset/task/1068">CSES 1068 — Weird Algorithm</a> and <a href="https://cses.fi/problemset/task/1083">CSES 1083 — Missing Number</a>. Before coding each, write one comment at the top of your file: <code>// n ≤ ___, so O(___) needed</code>. From today, every file in <code>codeforces/problemset/</code> starts with that comment line.</p>
+
+<div class="source">
+<p><strong>Primary source:</strong> <em>Competitive Programmer's Handbook</em>, Chapter 2 "Time complexity" (<code>resources/books/book.pdf</code>, pp. 17–24). Read §2.3 "Estimating efficiency" tonight — it's one page.</p>
+<p><strong>References:</strong> <a href="../reference/complexity-cheatsheet.html">complexity cheat sheet</a> (print it) · <a href="../reference/training-plan.html">the 10-day plan</a></p>
+<p>Anything unclear? Ask your agent-teacher — that's what it's for. Next lesson: the contest C++ template and the five STL tools that solve half of all easy problems.</p>
+</div>
+
+<script src="../assets/quiz.js"></script>
+<script>
+renderQuiz("quiz1", [
+  {
+    stem: "n ≤ 2·10⁵. Your idea is a double loop over all pairs. Verdict?",
+    options: ["Too slow, needs n log n", "Fast enough, code it now", "Only fits within 2 seconds"],
+    answer: 0,
+    explain: "n² = 4·10¹⁰ ≫ 10⁸. At 2·10⁵ you need O(n) or O(n log n)."
+  },
+  {
+    stem: "n ≤ 18 and the problem asks to pick the best subset of items. Intended approach?",
+    options: ["Try all 2ⁿ subsets directly", "Sort then use two pointers", "Dynamic programming over n²"],
+    answer: 0,
+    explain: "2¹⁸ ≈ 2.6·10⁵ — tiny. n ≤ 20 is the classic 'enumerate all subsets' signal."
+  },
+  {
+    stem: "n ≤ 5000. Is an O(n²) solution safe under a 1-second limit?",
+    options: ["Yes, 2.5·10⁷ is fine", "No, 2.5·10⁹ is huge", "Only if input is sorted"],
+    answer: 0,
+    explain: "5000² = 2.5·10⁷ < 10⁸. n ≤ 5000 is the O(n²) signal."
+  },
+  {
+    stem: "A single integer n up to 10¹⁸ is the entire input. What complexity must the solution be?",
+    options: ["O(log n) or a formula", "O(n) single pass works", "O(√n) is always safe"],
+    answer: 0,
+    explain: "You can't even loop to 10¹⁸. Think math or binary search. (√n = 10⁹ also fails.)"
+  },
+  {
+    stem: "t ≤ 10⁴ test cases, n ≤ 10⁵ each, but 'sum of n over all tests ≤ 2·10⁵'. Budget O(n) per test?",
+    options: ["Yes, total work is 2·10⁵", "No, worst case is 10⁹ ops", "Only with fast input reading"],
+    answer: 0,
+    explain: "The sum constraint caps total work at 2·10⁵ regardless of t. This phrasing is everywhere on Codeforces."
+  },
+  {
+    stem: "n ≤ 10⁵ values, each up to 10⁹. You sum them all. Which type for the sum?",
+    options: ["long long, sum hits 10¹⁴", "int is fine, values fit int", "double, to avoid overflow"],
+    answer: 0,
+    explain: "Each value fits int, but the SUM reaches 10¹⁴ > 2·10⁹ (int max). Constraint lines also decide types."
+  }
+]);
+</script>
+</body>
+</html>

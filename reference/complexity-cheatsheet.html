@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Complexity Cheat Sheet</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<p class="kicker">Reference · Print me</p>
+<h1>Constraints → Complexity</h1>
+<p class="subtitle">The first thing to compute on every problem, before any algorithm.</p>
+
+<div class="callout">
+<strong>The 10⁸ rule.</strong> A judge runs roughly 10⁷–10⁸ simple operations per second. With a 1 s limit, plug the maximum <em>n</em> into your algorithm's complexity — the result must stay under ~10⁸.
+</div>
+
+<table>
+<tr><th>Max input size</th><th>Allowed complexity</th><th>Typical technique</th></tr>
+<tr><td>n ≤ 10</td><td>O(n!)</td><td>try all permutations</td></tr>
+<tr><td>n ≤ 20</td><td>O(2ⁿ)</td><td>try all subsets, bitmask</td></tr>
+<tr><td>n ≤ 500</td><td>O(n³)</td><td>triple loop, Floyd–Warshall</td></tr>
+<tr><td>n ≤ 5 000</td><td>O(n²)</td><td>double loop, simple DP</td></tr>
+<tr><td>n ≤ 10⁶</td><td>O(n log n)</td><td>sorting, binary search, heaps</td></tr>
+<tr><td>n ≤ 10⁸</td><td>O(n)</td><td>single pass, two pointers, prefix sums</td></tr>
+<tr><td>n &gt; 10⁸ (or 10¹⁸)</td><td>O(log n) / O(1)</td><td>binary search on answer, math formula</td></tr>
+</table>
+<p>Table adapted from <em>Competitive Programmer's Handbook</em> §2.3 (<code>resources/books/book.pdf</code>, p. 21).</p>
+
+<h2>Common complexities, fastest to slowest</h2>
+<table>
+<tr><th>Class</th><th>n = 10⁵ costs</th><th>Examples</th></tr>
+<tr><td>O(1)</td><td>1</td><td>formula, array index</td></tr>
+<tr><td>O(log n)</td><td>~17</td><td>binary search, <code>set</code> operations</td></tr>
+<tr><td>O(n)</td><td>10⁵</td><td>one loop, prefix sum build</td></tr>
+<tr><td>O(n log n)</td><td>~1.7·10⁶</td><td><code>sort()</code>, n binary searches, Dijkstra</td></tr>
+<tr><td>O(n²)</td><td>10¹⁰ ✗</td><td>nested loops — too slow at this n!</td></tr>
+</table>
+
+<h2>Traps</h2>
+<ul>
+<li><strong>Constant factors:</strong> heavy operations (modulo, <code>map</code> lookups, string copies) can make an O(n log n) behave like 5–10× slower. If it's borderline, prefer arrays over <code>map</code>.</li>
+<li><strong>Multiple test cases:</strong> if t ≤ 10⁴ and n ≤ 10⁵ but "sum of n over all test cases ≤ 2·10⁵", budget against the <em>sum</em>, not t·n.</li>
+<li><strong>Overflow:</strong> n ≤ 10⁵ values ≤ 10⁹ → sums reach 10¹⁴. Use <code>long long</code>.</li>
+</ul>
+
+<footer><a href="training-plan.html">10-day plan</a> · <a href="../lessons/0001-constraints-to-complexity.html">Lesson 1</a></footer>
+</body>
+</html>

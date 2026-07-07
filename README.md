@@ -22,8 +22,8 @@ Laaksonen, paired with the [CSES Problem Set](https://cses.fi/problemset/).
 
 | Path | What's in it |
 |------|--------------|
-| `codeforces/problemset/` | Solutions, named `<contest><letter>_Name.cpp` (Codeforces convention, e.g. `2127A_...`). |
-| `atcoder/` | AtCoder solutions. |
+| `contests/codeforces/problemset/` | Solutions, named `<contest><letter>_Name.cpp` (Codeforces convention, e.g. `2127A_...`). |
+| `contests/atcoder/` | AtCoder solutions. |
 | `lessons/`, `reference/`, `assets/` | The taught course: lessons, cheat sheets, shared styling. |
 | `learning-records/` | Notes on what I actually learned (and misconceptions I fixed). |
 | `MISSION.md`, `NOTES.md`, `RESOURCES.md` | Goal, working notes, curated sources. |

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 3 — Binary Search on the Answer</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<p class="kicker">Lesson 3 of the 10-day plan · Day 2</p>
+<h1>Binary Search on the Answer</h1>
+<p class="subtitle">The technique that turns "try every possible answer" (too slow) into "test 60 answers" (instant) — and the single biggest points jump from your level.</p>
+
+<div class="callout">
+<strong>Why this matters most.</strong> Searching a sorted array you can already do with <code>lower_bound</code>. The real skill — the one that unlocks a whole tier of regional problems — is realizing that <em>the answer itself</em> can be binary-searched, even when there's no array in sight. Master this and problems that looked impossible become 15-line solutions.
+</div>
+
+<h2>The core idea: monotonic yes/no</h2>
+<p>Binary search needs one thing: a test <code>check(x)</code> whose answer goes <code>F F F T T T</code> as x increases and <strong>never flips back</strong>. That's <em>monotonicity</em>. When you have it, you don't try all values — you halve the range each step, so 10¹⁸ possible answers cost only ~60 tests.</p>
+
+<p>The tell in a problem statement: <em>"find the minimum X such that…"</em> or <em>"the maximum X such that…"</em> where making X bigger only ever makes the situation easier (or harder), never both.</p>
+
+<h2>Worked example — Factory Machines (CSES 1620)</h2>
+<p><em>n machines, machine i makes one product every <code>k[i]</code> seconds. Minimum time to make t products total?</em></p>
+<p>Trying every time value up to 10¹⁸ is impossible. But ask the question backwards:</p>
+<blockquote style="border-left:3px solid var(--rule);padding-left:1rem;color:var(--muted)">
+"Given x seconds, can we make at least t products?" → In x seconds machine i makes <code>x / k[i]</code> products. Sum them. Is the sum ≥ t?
+</blockquote>
+<p>That test is <strong>monotonic</strong>: more time never makes fewer products. So <code>F F F T T T</code> — binary search the smallest x that passes:</p>
+<pre><code>bool check(ll x, vector&lt;ll&gt;&amp; k, ll t) {
+    ll made = 0;
+    for (ll ki : k) {
+        made += x / ki;
+        if (made &gt;= t) return true;   // cap to avoid overflow
+    }
+    return made &gt;= t;
+}
+// ... in main, with k read and t given:
+ll lo = 1, hi = 2e18;
+while (lo &lt; lo + (hi - lo)) {           // i.e. while (lo < hi)
+    ll mid = lo + (hi - lo) / 2;
+    if (check(mid, k, t)) hi = mid;
+    else                  lo = mid + 1;
+}
+cout &lt;&lt; lo;                              // smallest time that works
+</code></pre>
+<p>The whole solution is the template from the <a href="../reference/binary-search-cheatsheet.html">binary search cheat sheet</a> plus a 4-line <code>check</code>. That's the pattern for an entire family of problems.</p>
+
+<h2>The 3 traps (all on the cheat sheet)</h2>
+<ul>
+<li><strong>Overflow in the midpoint:</strong> <code>(lo+hi)/2</code> overflows when both are ~10¹⁸. Always <code>lo + (hi-lo)/2</code>.</li>
+<li><strong><code>hi</code> too small:</strong> if your upper bound can't reach the true answer, you'll return garbage. Pick a provably-safe <code>hi</code> (here 2·10¹⁸ &gt; any possible time).</li>
+<li><strong><code>check</code> overflows:</strong> summing <code>x/k[i]</code> across n machines can blow past <code>ll</code> — so <code>return true</code> the moment you reach t (the <code>if (made &gt;= t)</code> cap above).</li>
+</ul>
+
+<h2>Check yourself</h2>
+<p>From memory.</p>
+<div class="quiz" id="quiz3"></div>
+
+<h2>Do it now (~45 min)</h2>
+<ol>
+<li><strong>Warm-up (STL):</strong> <a href="https://cses.fi/problemset/task/1621">CSES 1621 Distinct Numbers</a> — sort then count, or use a <code>set</code>. 5 min.</li>
+<li><strong>The real one:</strong> <a href="https://cses.fi/problemset/task/1620">CSES 1620 Factory Machines</a> — the worked example above. Write <code>check</code>, then the template.</li>
+<li><strong>Prove you own it:</strong> <a href="https://cses.fi/problemset/task/1085">CSES 1085 Array Division</a> — binary search the answer with a different <code>check</code> (can you split into k subarrays each with sum ≤ x?).</li>
+</ol>
+<p>Run the <a href="../reference/cpp-stl-cheatsheet.html#checklist">pre-submit checklist</a> on all three. For each: write <code>// check(x): ___ , monotonic because ___</code> at the top before coding.</p>
+
+<div class="source">
+<p><strong>Primary source:</strong> <em>Competitive Programmer's Handbook</em>, Ch 3.3 "Binary search" (<code>resources/books/book.pdf</code>, pp. 31–34). The "finding the smallest valid value" section is exactly this lesson.</p>
+<p><strong>References:</strong> <a href="../reference/binary-search-cheatsheet.html">binary search cheat sheet</a> (print) · <a href="../reference/cpp-stl-cheatsheet.html">STL</a> · <a href="../reference/complexity-cheatsheet.html">complexity</a></p>
+<p>Stuck framing a <code>check</code>? That's the hard part — ask me and we'll work it out together. Next: <strong>two pointers &amp; prefix sums.</strong></p>
+</div>
+
+<script src="../assets/quiz.js"></script>
+<script>
+renderQuiz("quiz3", [
+  {
+    stem: "What property must a problem have to binary search its answer?",
+    options: ["A monotonic yes/no test on the answer", "A sorted input array is required", "The answer must be a prime number"],
+    answer: 0,
+    explain: "You need check(x) to go F F F T T T (or the reverse) without flipping back. No array is required."
+  },
+  {
+    stem: "The search range is [1, 10^18]. Roughly how many check() calls does binary search make?",
+    options: ["About 60", "About 10^9", "About 10^18"],
+    answer: 0,
+    explain: "log2(10^18) ≈ 60. Each step halves the range, so ~60 tests regardless of how huge the range is."
+  },
+  {
+    stem: "Why write mid = lo + (hi - lo) / 2 instead of (lo + hi) / 2?",
+    options: ["(lo+hi) can overflow long long", "It is faster to compute", "It rounds up instead of down"],
+    answer: 0,
+    explain: "When lo and hi are near 10^18, lo+hi exceeds long long's range. lo+(hi-lo)/2 never overflows."
+  },
+  {
+    stem: "In Factory Machines, what is the monotonic test check(x)?",
+    options: ["In x seconds, is total output ≥ t?", "Is x divisible by every k[i]?", "Is x a valid machine index?"],
+    answer: 0,
+    explain: "Given x seconds, machine i makes x/k[i]; sum them. More time never means fewer products, so it's monotonic."
+  },
+  {
+    stem: "Your binary search returns a wrong, too-small answer on big inputs. Most likely cause?",
+    options: ["hi was set too low to reach it", "The array wasn't sorted", "You used long long"],
+    answer: 0,
+    explain: "If hi can't reach the true answer, the search converges below it. Pick a provably-safe upper bound."
+  }
+]);
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C++ Contest Template &amp; STL Cheat Sheet</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<p class="kicker">Reference · Print me</p>
+<h1>C++ Template &amp; STL Essentials</h1>
+<p class="subtitle">The template you paste every time, and the handful of STL tools that solve most easy problems. Never web-search "which header is iota in" again.</p>
+
+<h2>The template</h2>
+<p>Start every file with this. <code>&lt;bits/stdc++.h&gt;</code> pulls in <em>every</em> standard header at once — so <code>vector</code>, <code>iota</code> (from <code>&lt;numeric&gt;</code>), <code>sort</code>, <code>set</code>, <code>map</code> are all already there. You never include individual headers again.</p>
+<pre><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+using ll = long long;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    // solve here
+
+    return 0;
+}</code></pre>
+<p>The two <code>ios</code> lines make <code>cin</code>/<code>cout</code> fast (matters when reading 10⁵+ numbers). <code>using ll = long long;</code> so you type <code>ll</code> when the constraint says you'll overflow <code>int</code> — see <a href="complexity-cheatsheet.html">complexity sheet</a>.</p>
+
+<h2>vector — your default container</h2>
+<table>
+<tr><th>Do this</th><th>Code</th></tr>
+<tr><td>make size n, all zero</td><td><code>vector&lt;ll&gt; a(n);</code></td></tr>
+<tr><td>make size n, all = 7</td><td><code>vector&lt;int&gt; a(n, 7);</code></td></tr>
+<tr><td>read n values</td><td><code>for (auto&amp; x : a) cin &gt;&gt; x;</code></td></tr>
+<tr><td>add to end</td><td><code>a.push_back(x);</code></td></tr>
+<tr><td>size / last element</td><td><code>a.size()</code> · <code>a.back()</code></td></tr>
+<tr><td>2-D, rows×cols of 0</td><td><code>vector&lt;vector&lt;int&gt;&gt; g(rows, vector&lt;int&gt;(cols));</code></td></tr>
+</table>
+
+<h2>numeric — the ones you forgot</h2>
+<table>
+<tr><th>Goal</th><th>Code</th><th>Header (all in bits/stdc++)</th></tr>
+<tr><td>fill a, b, a+1 … (a=0)</td><td><code>iota(v.begin(), v.end(), 0);</code></td><td>&lt;numeric&gt;</td></tr>
+<tr><td>sum of a vector</td><td><code>accumulate(v.begin(), v.end(), 0LL);</code></td><td>&lt;numeric&gt;</td></tr>
+</table>
+<div class="callout"><strong>Overflow trap.</strong> <code>accumulate(v.begin(), v.end(), 0)</code> sums as <code>int</code> and overflows. The <code>0LL</code> seed forces <code>long long</code>. This is the 1083 lesson baked into one keystroke.</div>
+
+<h2>algorithm — sort &amp; friends</h2>
+<table>
+<tr><th>Goal</th><th>Code</th></tr>
+<tr><td>sort ascending</td><td><code>sort(a.begin(), a.end());</code></td></tr>
+<tr><td>sort descending</td><td><code>sort(a.rbegin(), a.rend());</code></td></tr>
+<tr><td>min / max element</td><td><code>*min_element(a.begin(), a.end())</code></td></tr>
+<tr><td>reverse</td><td><code>reverse(a.begin(), a.end());</code></td></tr>
+<tr><td>remove duplicates (after sort)</td><td><code>a.erase(unique(a.begin(), a.end()), a.end());</code></td></tr>
+</table>
+
+<h2>set &amp; map — membership and counting</h2>
+<table>
+<tr><th>Goal</th><th>Code</th></tr>
+<tr><td>seen-so-far, ordered, unique</td><td><code>set&lt;int&gt; s; s.insert(x); s.count(x);</code></td></tr>
+<tr><td>count occurrences</td><td><code>map&lt;int,int&gt; cnt; cnt[x]++;</code></td></tr>
+<tr><td>faster (unordered)</td><td><code>unordered_map&lt;int,int&gt;</code> — O(1) avg, no order</td></tr>
+</table>
+
+<h2 id="checklist">The pre-submit checklist (run every time)</h2>
+<p>20 seconds before you hit submit. This is the fix for "I still missed an edge case."</p>
+<table>
+<tr><th>#</th><th>Ask yourself</th></tr>
+<tr><td>1</td><td><strong>Overflow?</strong> Could any sum/product exceed 2·10⁹? → use <code>ll</code>. (bit you every time)</td></tr>
+<tr><td>2</td><td><strong>Smallest input?</strong> n = 0, n = 1, empty array — does the loop still work?</td></tr>
+<tr><td>3</td><td><strong>Off-by-one?</strong> Loop bounds <code>&lt;</code> vs <code>&lt;=</code>, indices 0-based.</td></tr>
+<tr><td>4</td><td><strong>Reset between test cases?</strong> Cleared every array/counter inside the <code>t</code> loop?</td></tr>
+<tr><td>5</td><td><strong>Read the whole input?</strong> Consumed every number the format promised?</td></tr>
+</table>
+
+<footer><a href="training-plan.html">10-day plan</a> · <a href="complexity-cheatsheet.html">complexity sheet</a> · <a href="../lessons/0002-cpp-template-and-stl.html">Lesson 2</a></footer>
+</body>
+</html>

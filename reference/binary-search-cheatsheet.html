@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Binary Search Cheat Sheet</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<p class="kicker">Reference · Print me</p>
+<h1>Binary Search</h1>
+<p class="subtitle">Two jobs: find a value in a sorted array (use the STL), and find the best answer in a monotonic search space (write the template).</p>
+
+<div class="callout">
+<strong>The one idea.</strong> Binary search works whenever the answer space is <em>monotonic</em>: a yes/no test that is <code>F F F T T T</code> as you increase x. Each step halves the range → O(log n). If you can phrase "is x good?" and the goodness never flips back, you can binary search it.
+</div>
+
+<h2>Job 1 — search a sorted array (don't hand-roll it)</h2>
+<table>
+<tr><th>Goal</th><th>Code (a is sorted)</th><th>Returns</th></tr>
+<tr><td>does x exist?</td><td><code>binary_search(a.begin(), a.end(), x)</code></td><td>bool</td></tr>
+<tr><td>first index ≥ x</td><td><code>lower_bound(a.begin(), a.end(), x) - a.begin()</code></td><td>index (or n)</td></tr>
+<tr><td>first index &gt; x</td><td><code>upper_bound(a.begin(), a.end(), x) - a.begin()</code></td><td>index (or n)</td></tr>
+<tr><td>count of value x</td><td><code>upper_bound(..,x) - lower_bound(..,x)</code></td><td>count</td></tr>
+</table>
+<p>These are O(log n) and already correct. Hand-rolling this loop is where off-by-one bugs live — let the STL do it.</p>
+
+<h2>Job 2 — binary search on the answer (the template)</h2>
+<p>When the problem asks for a <em>minimum/maximum value that works</em> and "works" is monotonic. Memorize this shape:</p>
+<pre><code>// smallest x in [lo, hi] with check(x) == true   (F F F T T T)
+ll lo = 0, hi = 2e18;          // bounds MUST cover the true answer
+while (lo &lt; hi) {
+    ll mid = lo + (hi - lo) / 2;   // avoids overflow
+    if (check(mid)) hi = mid;      // mid works -> answer is mid or lower
+    else            lo = mid + 1;  // mid fails -> answer is strictly higher
+}
+// lo == hi == the answer
+</code></pre>
+<p>For the mirror problem (<em>largest</em> x that works, <code>T T T F F F</code>): swap to <code>mid = lo + (hi - lo + 1)/2</code>, <code>if (check(mid)) lo = mid; else hi = mid - 1;</code></p>
+
+<div class="callout">
+<strong>Writing <code>check(x)</code>.</strong> Assume you're <em>given</em> x for free, then answer "is x enough?" — usually one O(n) loop. Example: "can we finish in x time?" → sum up how much each machine/worker produces in x time, compare to target.
+</div>
+
+<h2>Three traps</h2>
+<table>
+<tr><th>Trap</th><th>Fix</th></tr>
+<tr><td><code>(lo+hi)/2</code> overflows</td><td>use <code>lo + (hi-lo)/2</code></td></tr>
+<tr><td><code>hi</code> too small to reach answer</td><td>set <code>hi</code> to a provably-safe upper bound (often 2·10¹⁸)</td></tr>
+<tr><td><code>check</code> itself overflows</td><td>cap the running total, or use <code>ll</code> / <code>__int128</code></td></tr>
+</table>
+
+<h2>Is it monotonic? (the go/no-go check)</h2>
+<p>Before coding, sanity-check: "if x works, does every larger x also work?" If yes → binary search. If the goodness can turn off again as x grows, it's not monotonic and BS won't apply.</p>
+
+<footer><a href="training-plan.html">10-day plan</a> · <a href="complexity-cheatsheet.html">complexity</a> · <a href="cpp-stl-cheatsheet.html">STL</a> · <a href="../lessons/0003-binary-search.html">Lesson 3</a></footer>
+</body>
+</html>

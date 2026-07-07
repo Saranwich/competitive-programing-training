@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 2 — Template, STL, and the Pre-Submit Checklist</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<p class="kicker">Lesson 2 of the 10-day plan · Day 1</p>
+<h1>Stop Re-Remembering the Basics</h1>
+<p class="subtitle">A fixed template so you never web-search "which header is <code>iota</code> in" again — plus the 20-second ritual that kills your edge-case misses.</p>
+
+<div class="callout">
+<strong>Why this lesson, now.</strong> On CSES 1083 you lost time researching how to fill a vector and which header <code>iota</code> lives in, then you missed an overflow edge case on 1068 that you already <em>knew</em> about. Neither is a knowledge gap. Both are <strong>friction</strong> — and friction is fixable with two habits: one template, one checklist.
+</div>
+
+<h2>1. The template (paste it, every time)</h2>
+<p>The single line <code>#include &lt;bits/stdc++.h&gt;</code> pulls in <em>every</em> standard header — <code>&lt;vector&gt;</code>, <code>&lt;numeric&gt;</code> (that's where <code>iota</code> hid), <code>&lt;algorithm&gt;</code>, <code>&lt;set&gt;</code>, all of it. So the "which header?" question disappears permanently.</p>
+<pre><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+using ll = long long;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    // solve here
+
+    return 0;
+}</code></pre>
+<p>Save this as a snippet or keep it in a <code>template.cpp</code> you copy. The <code>using ll = long long;</code> line is your overflow insurance — when a constraint tells you the sum won't fit <code>int</code>, you just type <code>ll</code>. Full syntax lives in the <a href="../reference/cpp-stl-cheatsheet.html">STL cheat sheet</a> — print it.</p>
+
+<h2>2. The five STL tools that carry easy problems</h2>
+<p>Most Div-2 A/B and regional-easy problems need only these. You'll recognize every one — this is reactivation, not new material:</p>
+<ul>
+<li><code>vector&lt;T&gt; a(n)</code> — your default array. Read with <code>for (auto&amp; x : a) cin &gt;&gt; x;</code></li>
+<li><code>sort(a.begin(), a.end())</code> — half of all easy problems start here.</li>
+<li><code>iota(a.begin(), a.end(), 0)</code> — fill 0,1,2,… (the one you searched for).</li>
+<li><code>accumulate(a.begin(), a.end(), 0LL)</code> — sum. The <code>0LL</code> seed prevents the exact overflow you hit.</li>
+<li><code>set</code> / <code>map</code> — "have I seen this?" and "how many of each?" — <code>s.count(x)</code>, <code>cnt[x]++</code>.</li>
+</ul>
+
+<h2>3. The pre-submit checklist — your actual weak point</h2>
+<p>You said it yourself: "I still missed an edge case." Strong solvers don't have better memory — they run a <strong>fixed 20-second scan before every submit</strong>. Burn this in until it's automatic:</p>
+<table>
+<tr><th>#</th><th>Before you submit, ask…</th></tr>
+<tr><td>1</td><td><strong>Overflow?</strong> Any sum/product &gt; 2·10⁹? → <code>ll</code>. <em>(this is the one that keeps getting you)</em></td></tr>
+<tr><td>2</td><td><strong>Smallest input?</strong> n = 1, n = 0, empty — does it still work?</td></tr>
+<tr><td>3</td><td><strong>Off-by-one?</strong> <code>&lt;</code> vs <code>&lt;=</code>, 0-based indices.</td></tr>
+<tr><td>4</td><td><strong>Reset per test case?</strong> Every array/counter cleared inside the <code>t</code> loop?</td></tr>
+<tr><td>5</td><td><strong>Read all input?</strong> Consumed every number the format promised?</td></tr>
+</table>
+
+<h2>Check yourself</h2>
+<p>From memory — no scrolling.</p>
+<div class="quiz" id="quiz2"></div>
+
+<h2>Do it now (15 min)</h2>
+<p>Re-solve <a href="https://cses.fi/problemset/task/1083">CSES 1083</a> using <code>accumulate(..., 0LL)</code> instead of a hand-written loop — feel how the template removes the friction. Then run the 5-point checklist out loud before submitting. Tomorrow (Day 2: sorting &amp; binary search) you run the checklist on <em>every</em> problem.</p>
+
+<div class="source">
+<p><strong>Primary source:</strong> <em>Competitive Programmer's Handbook</em>, Ch 1.4 "Shortening code" and Ch 4 "Data structures" (<code>resources/books/book.pdf</code>, pp. 8–10, 35–45).</p>
+<p><strong>References:</strong> <a href="../reference/cpp-stl-cheatsheet.html">C++ template &amp; STL cheat sheet</a> (print) · <a href="../reference/complexity-cheatsheet.html">complexity sheet</a> · <a href="../reference/training-plan.html">10-day plan</a></p>
+<p>Stuck on any STL syntax? Ask me — that's what I'm here for. Next: <strong>Day 2 — sorting applications &amp; binary search on the answer.</strong></p>
+</div>
+
+<script src="../assets/quiz.js"></script>
+<script>
+renderQuiz("quiz2", [
+  {
+    stem: "You need to sum a vector of 10⁵ values each up to 10⁹. Which is safe?",
+    options: ["accumulate(v.begin(), v.end(), 0LL)", "accumulate(v.begin(), v.end(), 0)", "accumulate(v.begin(), v.end())"],
+    answer: 0,
+    explain: "The seed's type decides the sum's type. 0 sums as int and overflows at ~2·10⁹; 0LL sums as long long."
+  },
+  {
+    stem: "What does iota(a.begin(), a.end(), 5) put in a vector of size 3?",
+    options: ["5, 6, 7", "5, 5, 5", "0, 5, 10"],
+    answer: 0,
+    explain: "iota fills consecutive increasing values starting from the third argument: 5, 6, 7."
+  },
+  {
+    stem: "Which single include gives you vector, sort, iota, and set all at once?",
+    options: ["#include <bits/stdc++.h>", "#include <iostream>", "#include <standard>"],
+    answer: 0,
+    explain: "bits/stdc++.h is a GCC convenience header that includes the entire standard library."
+  },
+  {
+    stem: "On the pre-submit checklist, which item most often costs YOU points?",
+    options: ["Overflow — check for long long", "Compiler choice — clang vs gcc", "Font size in the editor"],
+    answer: 0,
+    explain: "Overflow is your recurring miss (1068, and the 1083 sum). Item 1 exists for exactly this."
+  },
+  {
+    stem: "Fastest correct way to read n integers into vector<int> a(n)?",
+    options: ["for (auto& x : a) cin >> x;", "for (auto x : a) cin >> x;", "cin >> a;"],
+    answer: 0,
+    explain: "The reference (auto&) writes into the vector. Plain 'auto x' copies, so reads go nowhere. cin>>a doesn't compile."
+  }
+]);
+</script>
+</body>
+</html>

@@ -1,13 +1,17 @@
-# Build artifacts
+# Build artifacts (CPH -> *.bin, C/C++ Runner -> build/, our task -> output/)
 *.exe
 *.o
 *.obj
-output/
+*.bin
+*.dSYM/
 a.out
+build/
+output/
 
 # Editor / OS junk
 .vscode/
 .DS_Store
+.cph/
 
 # Copyrighted book PDF — referenced in RESOURCES.md, not redistributed
 resources/

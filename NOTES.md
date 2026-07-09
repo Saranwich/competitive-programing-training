@@ -17,6 +17,7 @@
 - Day 1 (2026-07-08): Lessons 0001 (constraints→complexity) + 0002 (template/STL/checklist) done. Solved CSES 1068, 1083 (committed c538a7a). Strong transfer: applied overflow-check proactively on 1083. See LR-0002.
 - Day 2: Lesson 0003 (binary search on the answer). SOLVED CSES 1621 (hit unordered_map anti-hash TLE → switched to set), 1620 Factory Machines, 1085 Array Division. All AC after fixing detail bugs (see LR-0003). Binary search reactivated.
 - Recurring weakness to drill: edge cases → the pre-submit checklist (cpp-stl-cheatsheet #checklist). Make him run it every problem.
-- Day 3 (2026-07-09, 4h partial): Lesson 0004 (two pointers & prefix sums) + two-pointers-cheatsheet.html. Blank files: CSES 1640, 2183, 1662, 1141(stretch). Target: get first 3, 1141 bonus. Watch: does he pick window vs prefix+map correctly on his own; prefix array overflow (int→ll); seen[0]=1.
-- NEXT SESSION: sorting, greedy & events (plan Day 4).
+- Day 3 (2026-07-09, 4h partial): Lesson 0004 (two pointers & prefix sums) + two-pointers-cheatsheet.html. SOLVED CSES 1640 (both hash AND sort+two-pointer versions) + 1141 Playlist (stretch, took 4 review rounds). 2183 + 1662 NOT started — blank/stub, do them first next session (they're the core window + prefix-map reps he still needs). See LR-0004.
+- Prefix+map (seen[0]=1, map-not-unordered, negative keys OK) landed well via Q&A — he now gets it "finds subarrays, not two pointers". Good conceptual anchor.
+- NEXT SESSION: finish 2183 + 1662 (15 min each), THEN sorting/greedy/events (Day 4).
 - 10-day schedule lives in reference/training-plan.html.

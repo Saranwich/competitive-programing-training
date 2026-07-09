@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two Pointers &amp; Prefix Sums Cheat Sheet</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<p class="kicker">Reference · Print me</p>
+<h1>Two Pointers &amp; Prefix Sums</h1>
+<p class="subtitle">Two ways to kill an O(n²) subarray/pair scan. Prefix sums precompute; two pointers slide a window. Both hit O(n) or O(n log n).</p>
+
+<div class="callout">
+<strong>The trigger words.</strong> "subarray", "contiguous", "window", "pair", "range sum" → one of these two applies. Negatives or "divisible by k" → prefix + map. Positives and longest/shortest/count → two pointers.
+</div>
+
+<h2>Prefix sums — O(1) range sum</h2>
+<pre><code>vector&lt;ll&gt; p(n + 1, 0);              // long long! sums overflow int
+for (int i = 0; i &lt; n; i++) p[i + 1] = p[i] + a[i];
+ll sum_l_to_r = p[r + 1] - p[l];     // a[l..r] inclusive, 0-indexed
+</code></pre>
+<p><code>p[0] = 0</code> = "sum of nothing", so <code>l = 0</code> needs no special case. Size is <code>n + 1</code>.</p>
+
+<h2>Prefix + map — count subarrays with sum k</h2>
+<pre><code>map&lt;ll,ll&gt; seen; seen[0] = 1;        // empty prefix; NOT unordered_map (anti-hash TLE)
+ll pre = 0, ans = 0;
+for (int i = 0; i &lt; n; i++) {
+    pre += a[i];
+    ans += seen[pre - k];            // earlier prefixes closing a sum-k subarray
+    seen[pre]++;
+}
+</code></pre>
+<p>Works with negatives. Variant "sum divisible by k": key on <code>((pre % k) + k) % k</code> instead of the raw prefix.</p>
+
+<h2>Two pointers — sliding window (positive values)</h2>
+<pre><code>ll l = 0, sum = 0, ans = 0;
+for (ll r = 0; r &lt; n; r++) {
+    sum += a[r];                     // grow
+    while (sum &gt; target) { sum -= a[l]; l++; }   // shrink until valid
+    if (sum == target) ans++;        // window [l, r] is good
+}
+</code></pre>
+<p>Legal because growing <code>r</code> only raises <code>sum</code>, shrinking <code>l</code> only lowers it — monotonic. Both pointers move only right → O(n) total.</p>
+
+<h2>Two pointers — sorted pair (sum = x)</h2>
+<pre><code>sort(...);                           // keep original indices if the problem wants them
+ll i = 0, j = n - 1;
+while (i &lt; j) {
+    ll s = a[i] + a[j];
+    if (s == x) { /* found */ break; }
+    if (s &lt; x)  i++;                  // need bigger -> move left end up
+    else        j--;                  // need smaller -> move right end down
+}
+</code></pre>
+
+<h2>Pick the weapon</h2>
+<table>
+<tr><th>Situation</th><th>Use</th></tr>
+<tr><td>range sum queried many times</td><td>prefix sums</td></tr>
+<tr><td>count subarrays sum = k, values can be negative</td><td>prefix + map</td></tr>
+<tr><td>count / longest / shortest window, values positive</td><td>two pointers (sliding window)</td></tr>
+<tr><td>find a pair with sum x in an array</td><td>sort + two pointers from both ends</td></tr>
+</table>
+
+<h2>Traps</h2>
+<table>
+<tr><th>Trap</th><th>Fix</th></tr>
+<tr><td>prefix array is <code>int</code></td><td>make it <code>long long</code> — sums overflow fast</td></tr>
+<tr><td>forgot <code>seen[0] = 1</code></td><td>subarrays starting at index 0 get miscounted</td></tr>
+<tr><td>window trick on negative values</td><td>not monotonic → switch to prefix + map</td></tr>
+<tr><td><code>unordered_map</code> on CF/CSES</td><td>anti-hash TLE → use <code>map</code></td></tr>
+</table>
+
+<footer><a href="training-plan.html">10-day plan</a> · <a href="complexity-cheatsheet.html">complexity</a> · <a href="cpp-stl-cheatsheet.html">STL</a> · <a href="../lessons/0004-two-pointers-and-prefix-sums.html">Lesson 4</a></footer>
+</body>
+</html>

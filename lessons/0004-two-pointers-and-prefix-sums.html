@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 4 — Two Pointers &amp; Prefix Sums</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<p class="kicker">Lesson 4 of the 10-day plan · Day 3</p>
+<h1>Two Pointers &amp; Prefix Sums</h1>
+<p class="subtitle">Two cheap tricks that turn an O(n²) subarray scan into O(n). Together they cover a huge slice of easy–medium regional problems — and they pair naturally, so you learn both today.</p>
+
+<div class="callout">
+<strong>Same enemy, two weapons.</strong> Both attack the same monster: <em>"look at every subarray/pair"</em>, which is O(n²) and dies at n = 2·10⁵. <strong>Prefix sums</strong> precompute so any range sum is O(1). <strong>Two pointers</strong> slide a window so each element is visited a constant number of times. Reach for one the moment you see "subarray", "contiguous", "pair", or "window".</p>
+</div>
+
+<h2>Part 1 — Prefix sums</h2>
+<p>Build one array once: <code>p[i]</code> = sum of the first <code>i</code> elements. Then the sum of any range <code>[l, r]</code> (0-indexed, inclusive) is one subtraction:</p>
+<pre><code>vector&lt;ll&gt; p(n + 1, 0);
+for (int i = 0; i &lt; n; i++) p[i + 1] = p[i] + a[i];
+
+// sum of a[l..r] inclusive:
+ll s = p[r + 1] - p[l];
+</code></pre>
+<p>The <code>n + 1</code> size and the <code>+1</code> offset are the whole trick: <code>p[0] = 0</code> means "sum of nothing", so <code>l = 0</code> needs no special case. <strong>Always make <code>p</code> a <code>long long</code></strong> — a sum of 2·10⁵ values up to 10⁹ overflows <code>int</code> instantly.</p>
+
+<h3>The move that wins problems: prefix + hashmap</h3>
+<p>"How many subarrays have sum exactly <code>k</code>?" A range <code>[l, r]</code> has sum <code>k</code> exactly when <code>p[r+1] - p[l] = k</code>, i.e. <code>p[l] = p[r+1] - k</code>. So sweep left to right and, at each prefix, ask <em>"how many earlier prefixes equal (current − k)?"</em> Count them with a <code>map</code>.</p>
+<pre><code>map&lt;ll,ll&gt; seen;      // prefix value -&gt; how many times it occurred
+seen[0] = 1;          // the empty prefix, so subarrays starting at index 0 count
+ll pre = 0, ans = 0;
+for (int i = 0; i &lt; n; i++) {
+    pre += a[i];
+    ans += seen[pre - k];   // earlier prefixes that close a sum-k subarray here
+    seen[pre]++;
+}
+</code></pre>
+<p>That's O(n log n), and it's the skeleton for a whole family (sum = k, sum divisible by k, etc.). Use <code>map</code>, not <code>unordered_map</code> — remember the anti-hash TLE from <a href="0003-binary-search.html">Lesson 3</a>'s CSES 1621.</p>
+
+<h2>Part 2 — Two pointers (sliding window)</h2>
+<p>Keep a window <code>[l, r]</code>. Push <code>r</code> forward to grow it; when the window breaks a rule, push <code>l</code> forward to shrink it. <strong>Both pointers only ever move right</strong>, so the total work is O(n) even though it looks like a nested loop.</p>
+<pre><code>ll l = 0, sum = 0, ans = 0;
+for (ll r = 0; r &lt; n; r++) {
+    sum += a[r];                 // grow window to include a[r]
+    while (sum &gt; target) {       // shrink until valid again
+        sum -= a[l];
+        l++;
+    }
+    if (sum == target) ans++;    // window [l, r] satisfies the rule
+}
+</code></pre>
+<p>This exact shape solves "count subarrays with sum = x" for <strong>positive</strong> numbers (CSES 2183). The key that makes it legal: growing <code>r</code> only raises <code>sum</code>, shrinking <code>l</code> only lowers it — a monotonic knob, same instinct as binary search's <code>check</code>.</p>
+
+<div class="callout">
+<strong>Which one?</strong> Values can be negative, or you need "sum divisible by k" → <strong>prefix + map</strong>. Values are positive and you're finding a longest/shortest/counting window → <strong>two pointers</strong>. When unsure, prefix + map is the more general hammer.</p>
+</div>
+
+<h2>Check yourself</h2>
+<p>From memory.</p>
+<div class="quiz" id="quiz4"></div>
+
+<h2>Do it now (~3 hours)</h2>
+<p>Write <code>// approach: ___ , O(?)</code> at the top of each file <em>before</em> coding. Run the <a href="../reference/cpp-stl-cheatsheet.html#checklist">pre-submit checklist</a> on every one.</p>
+<ol>
+<li><strong>Two-pointer warm-up:</strong> <a href="https://cses.fi/problemset/task/1640">CSES 1640 Sum of Two Values</a> — find a pair summing to x. Sort with original indices, then two pointers from both ends. ~30 min.</li>
+<li><strong>Sliding window:</strong> <a href="https://cses.fi/problemset/task/2183">CSES 2183 Subarray Sums I</a> — positive values, count subarrays with sum = x. The window template above, almost verbatim. ~30 min.</li>
+<li><strong>Prefix + map (the important one):</strong> <a href="https://cses.fi/problemset/task/1662">CSES 1662 Subarray Sums II</a> — same question but values can be negative, so the window breaks. Prefix + map. ~40 min.</li>
+<li><strong>Stretch (window with a set):</strong> <a href="https://cses.fi/problemset/task/1141">CSES 1141 Playlist</a> — longest window with all-distinct values. Slide <code>r</code>, and while a duplicate exists shrink <code>l</code>. ~40 min.</li>
+</ol>
+<p>Get the first three; #4 is bonus if time holds. Ping me the moment a <code>check</code>/window feels wrong — don't grind past 20 min stuck.</p>
+
+<div class="source">
+<p><strong>Primary source:</strong> <em>Competitive Programmer's Handbook</em>, Ch 8.1 "Two pointers method" and Ch 9.1 begins the range-query / prefix-sum material (<code>resources/books/book.pdf</code>). Read 8.1 first — its two worked examples are exactly today's pattern.</p>
+<p><strong>References:</strong> <a href="../reference/two-pointers-cheatsheet.html">two pointers &amp; prefix sums cheat sheet</a> (print) · <a href="../reference/cpp-stl-cheatsheet.html">STL</a> · <a href="../reference/complexity-cheatsheet.html">complexity</a></p>
+<p>Stuck deciding window vs prefix-map? That choice <em>is</em> the skill — ask me and we'll reason it out. Next: <strong>sorting, greedy &amp; events.</strong></p>
+</div>
+
+<script src="../assets/quiz.js"></script>
+<script>
+renderQuiz("quiz4", [
+  {
+    stem: "With prefix array p (size n+1), the sum of a[l..r] inclusive equals:",
+    options: ["p[r + 1] - p[l]", "p[r] - p[l - 1]", "p[r] - p[l + 1]"],
+    answer: 0,
+    explain: "p[i] is the sum of the first i elements, so p[r+1] covers up to index r and subtracting p[l] removes indices before l."
+  },
+  {
+    stem: "Why must the prefix-sum array be long long, not int?",
+    options: ["A sum of many values overflows int", "Maps require long long keys", "It makes the loop run faster"],
+    answer: 0,
+    explain: "2*10^5 values up to 10^9 sum well past 2*10^9, the int limit. The individual values may fit, the running sum does not."
+  },
+  {
+    stem: "The sliding-window (two-pointer) sum trick is valid only when the values are:",
+    options: ["Non-negative, so the sum is monotonic", "Sorted in increasing order first", "Distinct with no repeats allowed"],
+    answer: 0,
+    explain: "Growing r must only raise the sum and shrinking l must only lower it. A negative value breaks that monotonicity, so use prefix + map."
+  },
+  {
+    stem: "To count subarrays with sum k using prefixes, at each index you look up:",
+    options: ["How many earlier prefixes equal pre - k", "How many earlier prefixes equal pre + k", "How many earlier prefixes equal k"],
+    answer: 0,
+    explain: "A subarray ending here has sum k when some earlier prefix equals pre - k, since pre minus that earlier prefix leaves exactly k."
+  },
+  {
+    stem: "Why initialise seen[0] = 1 before the prefix-sum loop?",
+    options: ["It counts subarrays that start at index zero", "It prevents the map from being empty", "It marks the array as already sorted"],
+    answer: 0,
+    explain: "The empty prefix has value 0; without it, a whole-prefix that itself equals k would be missed. It represents 'sum of nothing before the start'."
+  },
+  {
+    stem: "Two pointers achieves O(n) despite the inner while loop because:",
+    options: ["Each pointer only ever moves right, n steps total", "The while loop runs at most twice", "The array is halved each iteration"],
+    answer: 0,
+    explain: "l advances at most n times across the whole run, so the inner shrinking is amortised O(1) per outer step, giving O(n) overall."
+  }
+]);
+</script>
+</body>
+</html>

@@ -19,5 +19,7 @@
 - Recurring weakness to drill: edge cases → the pre-submit checklist (cpp-stl-cheatsheet #checklist). Make him run it every problem.
 - Day 3 (2026-07-09, 4h partial): Lesson 0004 (two pointers & prefix sums) + two-pointers-cheatsheet.html. SOLVED CSES 1640 (both hash AND sort+two-pointer versions) + 1141 Playlist (stretch, took 4 review rounds). 2183 + 1662 NOT started — blank/stub, do them first next session (they're the core window + prefix-map reps he still needs). See LR-0004.
 - Prefix+map (seen[0]=1, map-not-unordered, negative keys OK) landed well via Q&A — he now gets it "finds subarrays, not two pointers". Good conceptual anchor.
-- NEXT SESSION: finish 2183 + 1662 (15 min each), THEN sorting/greedy/events (Day 4).
+- Day 4 (2026-07-10): Lesson 0005 (greedy & exchange arguments) + greedy-cheatsheet.html authored. Scoped to ONE skill: recognise a greedy problem, pick the correct sort key, justify via exchange argument. Patterns A (interval scheduling, sort by END) + B (event sweep, ±1). Practice set: finish 2183+1662 (Day 3 leftovers) FIRST, then CSES 1629 Movie Festival, 1630 Tasks&Deadlines, 1619 Restaurant Customers, 1084 Apartments, stretch 1164 Room Allocation.
+- Watch: hash bias (LR-0004) — greedy set is sorting-based, good for balancing toolbox. Push him to say the sort key + why out loud before coding.
+- NEXT SESSION: verify Day 4 solves via /check (did he justify each sort key? did 2183/1662 finally land?). If full day, add bitmask/complete-search as 2nd Day-4 lesson. THEN Day 5 = DP I.
 - 10-day schedule lives in reference/training-plan.html.

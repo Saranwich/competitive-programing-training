@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Greedy &amp; Exchange Arguments Cheat Sheet</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<p class="kicker">Reference · Print me</p>
+<h1>Greedy &amp; Exchange Arguments</h1>
+<p class="subtitle">Take the locally best choice, never look back. O(n log n) — usually a sort plus one pass. The catch: prove it's safe before you trust it.</p>
+
+<div class="callout">
+<strong>The trust test.</strong> Take any optimal solution; show you can swap one of its choices for greedy's without making it worse. If you can find that swap, greedy is optimal. If you can't, greedy is wrong → sort differently, or use DP.
+</div>
+
+<h2>Pattern A — Interval scheduling (max non-overlapping)</h2>
+<pre><code>sort(v.begin(), v.end(), [](auto&amp; a, auto&amp; b){
+    return a.second &lt; b.second;      // by END time, ascending
+});
+int count = 0; ll lastEnd = -INF;
+for (auto&amp; [start, end] : v)
+    if (start &gt;= lastEnd) { count++; lastEnd = end; }
+</code></pre>
+<p>Sort by <strong>end</strong> — earliest-ending leaves the most room. NOT start, NOT length.</p>
+
+<h2>Pattern B — Event sweep (peak overlap / resources)</h2>
+<pre><code>vector&lt;pair&lt;ll,int&gt;&gt; ev;             // (time, +1 arrival / -1 departure)
+for (auto&amp; [a, b] : v) { ev.push_back({a,+1}); ev.push_back({b,-1}); }
+sort(ev.begin(), ev.end());          // ties: -1 sorts before +1, which is correct
+int cur = 0, best = 0;
+for (auto&amp; [t, d] : ev) { cur += d; best = max(best, cur); }
+</code></pre>
+<p>Min <em>rooms</em> to fit all events = same sweep, add a <code>priority_queue</code> of end times (free a room when its end has passed).</p>
+
+<h2>The sort-key field guide</h2>
+<table>
+<tr><th>Problem asks…</th><th>Sort by</th></tr>
+<tr><td>most non-overlapping intervals</td><td>ending time, ascending</td></tr>
+<tr><td>minimise sum of finish times / penalties</td><td>duration, ascending (short job first)</td></tr>
+<tr><td>peak simultaneous overlap</td><td>±1 events, by time</td></tr>
+<tr><td>min resources for all events</td><td>±1 events + heap of end times</td></tr>
+<tr><td>pair items under a budget/tolerance</td><td>value ascending, then two pointers</td></tr>
+</table>
+
+<h2>When it's NOT greedy</h2>
+<ul>
+<li><strong>Coin change, arbitrary coins</strong> — {1,3,4} for 6: greedy 4+1+1 loses to 3+3. Use DP.</li>
+<li><strong>Choices interact / future depends on the whole prefix</strong> — no local swap works → DP.</li>
+<li><strong>Can't name the sort key in one sentence</strong> — probably not greedy.</li>
+</ul>
+
+<div class="callout">
+<strong>Contest move.</strong> Can't prove the exchange? Test 2–3 candidate keys on a tiny hand-checked case. A key that fails one small case is dead instantly — no proof needed. Only argue the survivor.
+</div>
+
+<footer>Companion lesson: <a href="../lessons/0005-greedy-and-exchange-arguments.html">Greedy &amp; Exchange Arguments</a> · Next fallback when greedy fails: <a href="../lessons/0006-dp-i.html">DP I</a></footer>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 5 — Greedy &amp; Exchange Arguments</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<p class="kicker">Lesson 5 of the 10-day plan · Day 4</p>
+<h1>Greedy &amp; Exchange Arguments</h1>
+<p class="subtitle">Greedy is the cheapest technique to write and the easiest to get wrong. The whole skill is two moves: <em>find the right order</em>, then <em>convince yourself the order is safe</em>. Get those and a big slice of the regional-easy set falls in ten lines of code.</p>
+
+<div class="callout">
+<strong>The one-sentence definition.</strong> A greedy algorithm builds the answer by repeatedly taking the choice that looks best <em>right now</em>, never reconsidering. It's O(n log n) at worst (usually just a sort plus a linear pass). The catch: locally best is not always globally best — so greedy is the only technique where <strong>you must justify it before you trust it.</strong></p>
+</div>
+
+<h2>The trap, first</h2>
+<p>Make change for <strong>6</strong> using coins <code>{1, 3, 4}</code>. Greedy grabs the biggest coin ≤ remainder: <code>4</code>, then <code>1</code>, then <code>1</code> — three coins. But <code>3 + 3</code> is <strong>two</strong>. Greedy lost. Same problem, coins <code>{1, 5, 10, 25}</code> — greedy is optimal. The technique isn't wrong or right in the abstract; <strong>it depends on the exact structure</strong>, and the only way to know is to argue it.</p>
+
+<h2>The trust test: the exchange argument</h2>
+<p>Before you submit a greedy, run this thought in your head:</p>
+<blockquote>Take any optimal solution. Show you can <strong>swap one of its choices for greedy's choice without making it worse.</strong> Repeat, and the optimal solution turns into greedy's — so greedy is at least as good.</blockquote>
+<p>You rarely write this down in a contest. But doing it once, informally, is what separates "I guessed greedy" from "I know greedy works here." If you can't find the swap, that's your signal the greedy is <em>wrong</em> — go back to sorting differently, or reach for DP (Lesson 6).</p>
+
+<h2>Pattern A — Interval scheduling (the workhorse)</h2>
+<p>"Given intervals, pick the most that don't overlap." (Movies, meetings, tasks with start/end.) The winning order is <strong>sort by <em>ending</em> time, earliest first</strong> — then walk left to right, taking an interval whenever it starts at or after the last one you took ended.</p>
+<pre><code>sort(v.begin(), v.end(), [](auto&amp; a, auto&amp; b){
+    return a.second &lt; b.second;      // by END time
+});
+int count = 0; ll lastEnd = -INF;
+for (auto&amp; [start, end] : v) {
+    if (start &gt;= lastEnd) {           // fits after the last one taken
+        count++;
+        lastEnd = end;
+    }
+}
+</code></pre>
+<p><strong>Why end time, not start time or length?</strong> The exchange argument: the interval that <em>ends soonest</em> leaves the most room for everything after it. Any optimal schedule's first interval can be swapped for the earliest-ending one without losing count — so greedy matches optimal. (Sort by start and one giant early interval blocks everything; sort by length and you can still make a bad first pick.)</p>
+
+<h2>Pattern B — Event sweep (count overlaps / allocate resources)</h2>
+<p>"What's the maximum number of customers in the restaurant at once?" Don't think in intervals — think in <strong>events on a timeline</strong>. Split each interval into a <code>+1</code> at its arrival and a <code>-1</code> at its departure, sort all events by time, and sweep a running counter. The peak of that counter is your answer.</p>
+<pre><code>vector&lt;pair&lt;ll,int&gt;&gt; ev;             // (time, +1 arrival / -1 departure)
+for (auto&amp; [a, b] : v) { ev.push_back({a, +1}); ev.push_back({b, -1}); }
+sort(ev.begin(), ev.end());          // ties: -1 before +1 sorts first, which is correct
+int cur = 0, best = 0;
+for (auto&amp; [t, d] : ev) { cur += d; best = max(best, cur); }
+</code></pre>
+<p>This sweep idea scales far past today — it's the same skeleton for allocating rooms (add a priority queue of end times) and for line-sweep geometry. Learn the shape now.</p>
+
+<h2>Recognising the sort key</h2>
+<p>90% of greedy is choosing what to sort by. A rough field guide:</p>
+<table>
+<tr><th>The problem asks…</th><th>Sort by</th></tr>
+<tr><td>most non-overlapping intervals</td><td>ending time, ascending</td></tr>
+<tr><td>minimise sum of finish times / penalties</td><td>duration (processing time), ascending</td></tr>
+<tr><td>peak simultaneous overlap</td><td>split into ±1 events, by time</td></tr>
+<tr><td>match/pair items under a budget</td><td>value ascending, then two pointers</td></tr>
+</table>
+<p>When a greedy order isn't obvious, try the two or three plausible keys on a <em>tiny</em> example where you know the true answer. If a key fails even one small case, it's dead — no need to prove anything.</p>
+
+<h2>Check yourself</h2>
+<p>From memory.</p>
+<div class="quiz" id="quiz5"></div>
+
+<h2>Do it now (~3 hours)</h2>
+<p>Write <code>// approach: greedy sort by ___ , O(n log n)</code> at the top of each file <em>before</em> coding, and one line of why that key is safe. Run the <a href="../reference/cpp-stl-cheatsheet.html#checklist">pre-submit checklist</a> every time.</p>
+<div class="callout"><strong>First, close out Day 3.</strong> Finish <a href="https://cses.fi/problemset/task/2183">CSES 2183 Subarray Sums I</a> and <a href="https://cses.fi/problemset/task/1662">CSES 1662 Subarray Sums II</a> (~15 min each) — they're the last prefix+map reps. Then start the greedy set below.</div>
+<ol>
+<li><strong>Interval scheduling (Pattern A):</strong> <a href="https://cses.fi/problemset/task/1629">CSES 1629 Movie Festival</a> — max non-overlapping movies. This is Pattern A almost verbatim. ~25 min.</li>
+<li><strong>Sort-key by exchange:</strong> <a href="https://cses.fi/problemset/task/1630">CSES 1630 Tasks and Deadlines</a> — minimise total penalty. Figure out the key <em>and</em> argue why (shortest job first). ~30 min.</li>
+<li><strong>Event sweep (Pattern B):</strong> <a href="https://cses.fi/problemset/task/1619">CSES 1619 Restaurant Customers</a> — peak simultaneous customers. The ±1 sweep above. ~25 min.</li>
+<li><strong>Greedy + two pointers (ties to Lesson 4):</strong> <a href="https://cses.fi/problemset/task/1084">CSES 1084 Apartments</a> — match applicants to apartments within tolerance. Sort both, walk two pointers. ~30 min.</li>
+<li><strong>Stretch (sweep + heap):</strong> <a href="https://cses.fi/problemset/task/1164">CSES 1164 Room Allocation</a> — min rooms for all events. Pattern B plus a priority queue of end times. ~40 min.</li>
+</ol>
+<p>Get 1–4; #5 is the reach. For every one, say the sort key out loud before coding — if you can't justify it in a sentence, ping me <em>before</em> you burn 20 minutes.</p>
+
+<div class="source">
+<p><strong>Primary source:</strong> <em>Competitive Programmer's Handbook</em>, Ch 6 "Greedy algorithms" (<code>resources/books/book.pdf</code>). Its scheduling and tasks-and-deadlines sections are exactly problems 1 and 2 above — read it before you start, cap it at 45 min.</p>
+<p><strong>References:</strong> <a href="../reference/greedy-cheatsheet.html">greedy &amp; exchange-argument cheat sheet</a> (print) · <a href="../reference/complexity-cheatsheet.html">complexity</a> · <a href="../reference/cpp-stl-cheatsheet.html">STL</a></p>
+<p>Not sure a greedy is safe? Bring me the swap you can't find — that conversation <em>is</em> the skill. Next: <strong>DP I — when greedy's exchange argument fails, this is the fallback.</strong></p>
+</div>
+
+<script src="../assets/quiz.js"></script>
+<script>
+renderQuiz("quiz5", [
+  {
+    stem: "To pick the most non-overlapping intervals, you sort them by:",
+    options: ["Ending time, earliest first", "Starting time, earliest first", "Length, shortest interval first"],
+    answer: 0,
+    explain: "The earliest-ending interval leaves the most room for the rest; an exchange argument shows it always matches an optimal schedule. Sorting by start or length can make a bad first pick."
+  },
+  {
+    stem: "A greedy algorithm is safe to trust only once you can:",
+    options: ["Swap an optimal choice toward greedy's without loss", "Run it once on the sample input given", "Confirm the input array was sorted first"],
+    answer: 0,
+    explain: "That swap is the exchange argument: if any optimal solution can be nudged toward greedy's choices without getting worse, greedy is at least as good. Passing one sample proves nothing."
+  },
+  {
+    stem: "For coins {1, 3, 4} making 6, greedy-by-largest coin is:",
+    options: ["Worse than the true optimum here", "Equal to the true optimum here", "Always the true optimum here"],
+    answer: 0,
+    explain: "Greedy takes 4+1+1 (three coins) but 3+3 is two. The same greedy is optimal for {1,5,10,25}, so correctness depends entirely on the coin structure, not the method."
+  },
+  {
+    stem: "To find the peak number of overlapping intervals, you sweep by:",
+    options: ["Adding one at each start, subtracting one at each end", "Sorting intervals by length and scanning once", "Taking the interval that ends earliest repeatedly"],
+    answer: 0,
+    explain: "Split every interval into a +1 arrival and a -1 departure, sort by time, and track the running counter; its maximum is the peak overlap. This is the event-sweep pattern."
+  },
+  {
+    stem: "To minimise total penalty in Tasks and Deadlines you process tasks by:",
+    options: ["Shortest duration first, always", "Earliest deadline first, always", "Largest deadline first, always"],
+    answer: 0,
+    explain: "Each task delays every task after it by its own duration, so doing short jobs first minimises the accumulated finish times. The deadlines do not affect the order at all."
+  },
+  {
+    stem: "When no greedy sort key seems obviously correct, the fastest next step is:",
+    options: ["Test each candidate key on a tiny known case", "Prove the exchange argument for all of them", "Increase the array size and re-time it"],
+    answer: 0,
+    explain: "A key that fails even one small hand-checkable case is dead immediately, no proof needed. Only bother arguing the exchange for a key that survives the tiny tests."
+  }
+]);
+</script>
+</body>
+</html>

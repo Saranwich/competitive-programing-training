@@ -50,7 +50,7 @@ for (ll r = 0; r &lt; n; r++) {
     if (sum == target) ans++;    // window [l, r] satisfies the rule
 }
 </code></pre>
-<p>This exact shape solves "count subarrays with sum = x" for <strong>positive</strong> numbers (CSES 2183). The key that makes it legal: growing <code>r</code> only raises <code>sum</code>, shrinking <code>l</code> only lowers it — a monotonic knob, same instinct as binary search's <code>check</code>.</p>
+<p>This exact shape solves "count subarrays with sum = x" for <strong>positive</strong> numbers (CSES 1660). The key that makes it legal: growing <code>r</code> only raises <code>sum</code>, shrinking <code>l</code> only lowers it — a monotonic knob, same instinct as binary search's <code>check</code>.</p>
 
 <div class="callout">
 <strong>Which one?</strong> Values can be negative, or you need "sum divisible by k" → <strong>prefix + map</strong>. Values are positive and you're finding a longest/shortest/counting window → <strong>two pointers</strong>. When unsure, prefix + map is the more general hammer.</p>
@@ -64,8 +64,8 @@ for (ll r = 0; r &lt; n; r++) {
 <p>Write <code>// approach: ___ , O(?)</code> at the top of each file <em>before</em> coding. Run the <a href="../reference/cpp-stl-cheatsheet.html#checklist">pre-submit checklist</a> on every one.</p>
 <ol>
 <li><strong>Two-pointer warm-up:</strong> <a href="https://cses.fi/problemset/task/1640">CSES 1640 Sum of Two Values</a> — find a pair summing to x. Sort with original indices, then two pointers from both ends. ~30 min.</li>
-<li><strong>Sliding window:</strong> <a href="https://cses.fi/problemset/task/2183">CSES 2183 Subarray Sums I</a> — positive values, count subarrays with sum = x. The window template above, almost verbatim. ~30 min.</li>
-<li><strong>Prefix + map (the important one):</strong> <a href="https://cses.fi/problemset/task/1662">CSES 1662 Subarray Sums II</a> — same question but values can be negative, so the window breaks. Prefix + map. ~40 min.</li>
+<li><strong>Sliding window:</strong> <a href="https://cses.fi/problemset/task/1660">CSES 1660 Subarray Sums I</a> — positive values, count subarrays with sum = x. The window template above, almost verbatim. ~30 min.</li>
+<li><strong>Prefix + map (the important one):</strong> <a href="https://cses.fi/problemset/task/1661">CSES 1661 Subarray Sums II</a> — same question but values can be negative, so the window breaks. Prefix + map. ~40 min.</li>
 <li><strong>Stretch (window with a set):</strong> <a href="https://cses.fi/problemset/task/1141">CSES 1141 Playlist</a> — longest window with all-distinct values. Slide <code>r</code>, and while a duplicate exists shrink <code>l</code>. ~40 min.</li>
 </ol>
 <p>Get the first three; #4 is bonus if time holds. Ping me the moment a <code>check</code>/window feels wrong — don't grind past 20 min stuck.</p>

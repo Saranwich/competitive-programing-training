@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 6 — DP I: State, Transition, Order</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<p class="kicker">Lesson 6 of the 10-day plan · Day 5</p>
+<h1>DP I — State, Transition, Order</h1>
+<p class="subtitle">When greedy's swap fails, don't give up on trying every choice — just stop <em>recomputing</em> the same subproblem. That's the whole idea of dynamic programming. Nail the 1D version and coin-change, dice, and grid-path problems become fill-in-a-loop.</p>
+
+<div class="callout">
+<strong>The one-sentence definition.</strong> DP = <strong>brute force + memory</strong>. You define a subproblem, solve the small ones first, and reuse their answers to build bigger ones — so each subproblem is solved <em>once</em> instead of exponentially many times. If greedy is "one clever choice," DP is "try every choice, but never twice."</p>
+</div>
+
+<h2>Why now: greedy's fallback</h2>
+<p>Last lesson: coins <code>{1,3,4}</code> making 6 — greedy grabs <code>4+1+1</code> (three) but <code>3+3</code> is two. No safe swap exists, so greedy is <em>wrong</em>. DP is the answer: to make 6, try <em>every</em> last coin (a 1, a 3, or a 4) and take the best of the smaller subproblems. That "try every last move, reuse subanswers" is the reflex to build today.</p>
+
+<h2>The recipe — five questions, every time</h2>
+<p>Every 1D DP is the same five-line ritual. Answer these <em>in words</em> before you write code:</p>
+<table>
+<tr><th>#</th><th>Question</th><th>For "min coins to make x"</th></tr>
+<tr><td>1</td><td><strong>State</strong> — what does <code>dp[i]</code> mean?</td><td><code>dp[x]</code> = fewest coins summing to exactly <code>x</code></td></tr>
+<tr><td>2</td><td><strong>Transition</strong> — try every last move</td><td><code>dp[x] = min over coins c of dp[x-c] + 1</code></td></tr>
+<tr><td>3</td><td><strong>Base case</strong> — smallest subproblem</td><td><code>dp[0] = 0</code> (zero coins make 0)</td></tr>
+<tr><td>4</td><td><strong>Order</strong> — fill small → large</td><td><code>x</code> from 1 up to target</td></tr>
+<tr><td>5</td><td><strong>Answer</strong> — where does it live?</td><td><code>dp[target]</code></td></tr>
+</table>
+<p>Miss any one and the code is wrong. The state definition (Q1) is 80% of the work — get it in one clear sentence and the transition usually writes itself.</p>
+
+<h2>Worked example A — counting (sum the transitions)</h2>
+<p><a href="https://cses.fi/problemset/task/1633">CSES 1633 Dice Combinations</a>: how many ordered ways to roll a sum of <code>n</code> with dice showing 1–6? The last roll was some value <code>1..6</code>, so <strong>sum</strong> the ways to reach what came before it:</p>
+<pre><code>const int MOD = 1e9 + 7;
+vector&lt;long long&gt; dp(n + 1, 0);
+dp[0] = 1;                                 // one way to make 0: roll nothing
+for (int x = 1; x &lt;= n; x++)
+    for (int d = 1; d &lt;= 6; d++)
+        if (x - d &gt;= 0)
+            dp[x] = (dp[x] + dp[x - d]) % MOD;   // sum over last roll
+cout &lt;&lt; dp[n] &lt;&lt; "\n";
+</code></pre>
+<p><strong>Counting DP sums; the answer explodes → take it mod 1e9+7 as you go.</strong> This is your overflow instinct (LR-0002) in DP form: any "count the number of ways" problem will say "modulo 1e9+7" — apply it inside the loop, never at the end.</p>
+
+<h2>Worked example B — optimisation (min/max the transitions)</h2>
+<p><a href="https://cses.fi/problemset/task/1634">CSES 1634 Minimizing Coins</a>: fewest coins from set <code>c[]</code> to make <code>x</code>. Same shape, but <code>min</code> instead of sum — and now you need a "impossible" sentinel:</p>
+<pre><code>const long long INF = 1e18;
+vector&lt;long long&gt; dp(x + 1, INF);
+dp[0] = 0;
+for (int s = 1; s &lt;= x; s++)
+    for (long long coin : c)
+        if (s - coin &gt;= 0 &amp;&amp; dp[s - coin] + 1 &lt; dp[s])
+            dp[s] = dp[s - coin] + 1;
+cout &lt;&lt; (dp[x] == INF ? -1 : dp[x]) &lt;&lt; "\n";   // INF means unreachable
+</code></pre>
+<div class="callout"><strong>Two bugs to pre-empt</strong> (both are your recurring family). <strong>(1) The INF guard:</strong> only relax from <code>dp[s-coin]</code> if it's reachable — <code>INF + 1</code> silently becomes a "valid" answer if you skip the check. <strong>(2) Bounds:</strong> <code>s - coin &gt;= 0</code> before indexing, or you read negative indices. Same discipline as the <code>seen[0]</code> / <code>&gt;= l</code> guards from Lesson 4.</div>
+
+<h2>The one twist: does order matter?</h2>
+<p>Two problems look identical but aren't. <a href="https://cses.fi/problemset/task/1635">Coin Combinations I</a> counts <em>ordered</em> sequences (2+3 and 3+2 are different) — loop <strong>sum outside, coins inside</strong>. <a href="https://cses.fi/problemset/task/1636">Coin Combinations II</a> counts <em>sets</em> (2+3 = 3+2) — loop <strong>coins outside, sum inside</strong>. Same recurrence, swapped loops. When a counting answer comes out too big, this loop order is the first thing to check.</p>
+
+<h2>Check yourself</h2>
+<p>From memory.</p>
+<div class="quiz" id="quiz6"></div>
+
+<h2>Do it now (~3 hours)</h2>
+<p>At the top of each file write the <strong>five recipe answers as a comment</strong> before coding — state, transition, base, order, answer. That comment <em>is</em> the solve; the code is transcription. Run the <a href="../reference/cpp-stl-cheatsheet.html#checklist">pre-submit checklist</a> every time.</p>
+<ol>
+<li><strong>Counting (sum):</strong> <a href="https://cses.fi/problemset/task/1633">CSES 1633 Dice Combinations</a> — worked above, type it from your own recipe, not the lesson. ~15 min.</li>
+<li><strong>Optimisation (min + INF):</strong> <a href="https://cses.fi/problemset/task/1634">CSES 1634 Minimizing Coins</a> — mind the sentinel and the <code>-1</code> output. ~20 min.</li>
+<li><strong>Ordered counting:</strong> <a href="https://cses.fi/problemset/task/1635">CSES 1635 Coin Combinations I</a> — sum outside, coins inside, mod as you go. ~20 min.</li>
+<li><strong>Unordered counting (loop-order twist):</strong> <a href="https://cses.fi/problemset/task/1636">CSES 1636 Coin Combinations II</a> — flip the loops. Prove to yourself why. ~30 min.</li>
+<li><strong>Different transition:</strong> <a href="https://cses.fi/problemset/task/1637">CSES 1637 Removing Digits</a> — state <code>dp[x]</code> = min steps to 0; the "moves" are the digits of <code>x</code>. ~25 min.</li>
+<li><strong>Stretch (reconstruct the answer):</strong> <a href="https://cses.fi/problemset/task/1746">CSES 1746 Array Description</a> or come back to it — DP where you also print <em>which</em> choices. ~40 min.</li>
+</ol>
+<p>Get 1–5; #6 is the reach. For every one, say your <strong>state definition out loud in one sentence</strong> before coding — if you can't, that's the signal to ping me, not to start typing.</p>
+
+<div class="source">
+<p><strong>Primary source:</strong> <em>Competitive Programmer's Handbook</em>, Ch 7 "Dynamic programming" (<code>resources/books/book.pdf</code>) — the coin problem section is exactly examples A and B above. Read it before you start, cap at 45 min.</p>
+<p><strong>References:</strong> <a href="../reference/dp-cheatsheet.html">DP I cheat sheet</a> (print) · <a href="../reference/complexity-cheatsheet.html">complexity</a> · <a href="../reference/cpp-stl-cheatsheet.html">STL &amp; checklist</a></p>
+<p>Stuck defining a state? Bring me the problem and say what the subproblem <em>should</em> mean — pinning that sentence down together <em>is</em> the skill. Next: <strong>DP II — 2D states (grids, knapsack, LCS).</strong></p>
+</div>
+
+<script src="../assets/quiz.js"></script>
+<script>
+renderQuiz("quiz6", [
+  {
+    stem: "The core idea that makes dynamic programming fast is that it:",
+    options: ["Solves each subproblem once and reuses the result", "Always takes the locally best choice and moves on", "Sorts the input and sweeps it with two pointers"],
+    answer: 0,
+    explain: "DP is brute force plus memory: overlapping subproblems are computed a single time and stored, turning exponential work into a linear fill. Taking one local choice is greedy, not DP."
+  },
+  {
+    stem: "The hardest and most important step of a 1D DP is usually:",
+    options: ["Defining what dp[i] means in one sentence", "Choosing which STL container stores the table", "Deciding whether to use recursion or a loop"],
+    answer: 0,
+    explain: "A clear state definition makes the transition, base case, and answer location fall out almost mechanically. Container choice and recursion-versus-loop are minor implementation details."
+  },
+  {
+    stem: "For a 'count the number of ways' DP, the transition combines subanswers by:",
+    options: ["Summing them, modulo 1e9+7 as you go", "Taking their minimum with an INF guard", "Taking their maximum over all choices"],
+    answer: 0,
+    explain: "Counting DP adds up the ways from each last move, and the total overflows fast, so you reduce mod 1e9+7 inside the loop. Min with an INF guard belongs to optimisation DP instead."
+  },
+  {
+    stem: "In 'minimum coins to make x', the INF sentinel exists so that you:",
+    options: ["Never relax a sum from an unreachable subproblem", "Avoid sorting the coin array before the loop", "Skip the modulo operation on the final answer"],
+    answer: 0,
+    explain: "INF marks 'no way to make this sum yet', and guarding against it stops INF+1 from posing as a real answer. The final output prints -1 whenever dp[x] is still INF."
+  },
+  {
+    stem: "Coin Combinations I counts ordered sequences; you get that by looping:",
+    options: ["The target sum outside and the coins inside", "The coins outside and the target sum inside", "Both loops in descending order over the array"],
+    answer: 0,
+    explain: "Sum-outside, coins-inside lets every coin be the last move at each sum, so 2+3 and 3+2 count separately. Flipping to coins-outside counts each set once, which is Coin Combinations II."
+  },
+  {
+    stem: "Before indexing dp[x - c] in any coin-style transition you must first:",
+    options: ["Check that x minus c is at least zero", "Reset the whole dp array back to zero", "Sort the coins from largest to smallest"],
+    answer: 0,
+    explain: "A last move of size c is only legal when x - c is a non-negative sum you can actually index. Skipping the bound reads negative indices, the same guard discipline as the window checks in Lesson 4."
+  }
+]);
+</script>
+</body>
+</html>

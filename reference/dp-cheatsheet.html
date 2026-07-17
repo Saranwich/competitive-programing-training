@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DP I Cheat Sheet — 1D Dynamic Programming</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<p class="kicker">Reference · Print me</p>
+<h1>DP I — 1D Dynamic Programming</h1>
+<p class="subtitle">Brute force + memory. Define a subproblem, solve small ones first, reuse them. Each state solved once.</p>
+
+<div class="callout">
+<strong>The five-question recipe.</strong> Answer in words before writing code:
+<strong>1. State</strong> — what is <code>dp[i]</code>? · <strong>2. Transition</strong> — try every last move · <strong>3. Base case</strong> — smallest subproblem · <strong>4. Order</strong> — fill small→large · <strong>5. Answer</strong> — where does it live? State (Q1) is 80% of the work.
+</div>
+
+<h2>Counting DP — SUM the transitions</h2>
+<pre><code>const int MOD = 1e9 + 7;
+vector&lt;long long&gt; dp(n + 1, 0);
+dp[0] = 1;                              // one way to make 0
+for (int x = 1; x &lt;= n; x++)
+    for (int move : moves)
+        if (x - move &gt;= 0)
+            dp[x] = (dp[x] + dp[x - move]) % MOD;
+</code></pre>
+<p>"Number of ways" ⇒ <strong>sum</strong>, and it overflows ⇒ <strong>mod 1e9+7 inside the loop</strong>. Base case is <code>dp[0] = 1</code>.</p>
+
+<h2>Optimisation DP — MIN / MAX the transitions</h2>
+<pre><code>const long long INF = 1e18;
+vector&lt;long long&gt; dp(x + 1, INF);
+dp[0] = 0;
+for (int s = 1; s &lt;= x; s++)
+    for (long long c : coins)
+        if (s - c &gt;= 0 &amp;&amp; dp[s - c] + 1 &lt; dp[s])
+            dp[s] = dp[s - c] + 1;
+cout &lt;&lt; (dp[x] == INF ? -1 : dp[x]);    // INF = unreachable
+</code></pre>
+<p>Base case is <code>dp[0] = 0</code>. Answer is <code>dp[target]</code>.</p>
+
+<h2>Two guards — never skip</h2>
+<table>
+<tr><th>Guard</th><th>Why</th></tr>
+<tr><td><code>s - c &gt;= 0</code> before indexing</td><td>negative index = garbage / crash</td></tr>
+<tr><td>only relax if <code>dp[s-c] != INF</code></td><td><code>INF + 1</code> fakes a valid answer</td></tr>
+</table>
+
+<h2>The loop-order twist (counting)</h2>
+<table>
+<tr><th>You want to count…</th><th>Loop order</th></tr>
+<tr><td>ordered sequences (2+3 ≠ 3+2)</td><td>sum outside, coins inside</td></tr>
+<tr><td>unordered sets (2+3 = 3+2)</td><td>coins outside, sum inside</td></tr>
+</table>
+<p>Answer too big? Check this first.</p>
+
+<h2>Recognising a DP problem</h2>
+<ul>
+<li>"Number of ways to…" / "minimum/maximum … to reach …"</li>
+<li>Greedy's exchange swap fails — choices interact.</li>
+<li>Small target/state space (n ≤ ~1e6 for 1D, product ≤ ~1e7 for 2D).</li>
+<li>You can phrase "the last move was ___" and the rest is a smaller identical problem.</li>
+</ul>
+
+<div class="callout">
+<strong>Contest move.</strong> Write the five recipe answers as a comment first. If you can't state <code>dp[i]</code> in one sentence, you don't have a DP yet — go back to the state, not the code.
+</div>
+
+<footer>Companion lesson: <a href="../lessons/0006-dp-i.html">DP I — State, Transition, Order</a> · Prior fallback point: <a href="../lessons/0005-greedy-and-exchange-arguments.html">Greedy</a> · Next: DP II (2D states)</footer>
+</body>
+</html>

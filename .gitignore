@@ -15,7 +15,9 @@ output/
 
 # Copyrighted book PDF — referenced in RESOURCES.md, not redistributed
 resources/
+ICPC Reference Document.pdf
 
 # ponytail: teaching workspace (lessons/, reference/, learning-records/,
 # MISSION.md, NOTES.md, RESOURCES.md, assets/) is intentionally TRACKED —
 # this repo is the record of how the CP journey was self-taught.
+ICPC Reference Document.md

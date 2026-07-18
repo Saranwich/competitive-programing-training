@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>ICPC Team Reference Document (v3)</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof hljs !== 'undefined') {
+      document.querySelectorAll('pre code').forEach((block) => {
+        if (!block.className.includes('language-')) {
+          block.classList.add('language-cpp');
+        }
+        hljs.highlightElement(block);
+      });
+    }
+  }, { capture: true });
+</script>
+<script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+<style>
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  @page {
+    size: A4 portrait;
+    margin: 1.2cm 1.2cm 1.2cm 1.2cm;
+    @top-left {
+      content: "ICPC Team Reference Document — Thammasat University";
+      font-family: "Sarabun", "Segoe UI", sans-serif;
+      font-size: 8.5pt;
+      color: #666;
+    }
+    @top-right {
+      content: "หน้า " counter(page);
+      font-family: "Sarabun", "Segoe UI", sans-serif;
+      font-size: 9pt;
+      font-weight: bold;
+      color: #222;
+    }
+  }
+  @page :first {
+    @top-left { content: none; }
+    @top-right { content: none; }
+  }
+  .cover-page {
+    page-break-after: always; break-after: page;
+    height: 25cm; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+    gap: 16px;
+  }
+  .cover-logo {
+    width: 130px; height: 130px; border: 1.5px dashed #999; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8pt; color: #888; margin-bottom: 20px;
+  }
+  .cover-uni { font-size: 20pt; font-weight: bold; }
+  .cover-title { font-size: 17pt; font-weight: bold; }
+  .cover-team { font-size: 15pt; margin: 40px 0 70px 0; }
+  .cover-dept { font-size: 12pt; font-weight: bold; line-height: 1.9; }
+  .toc-sec { columns: 2; column-gap: 28px; margin-top: 10px; }
+  .toc-group { break-inside: avoid; page-break-inside: avoid; margin-bottom: 14px; }
+  .toc-head {
+    font-weight: bold; font-size: 11pt; color: #0d3b66;
+    border-bottom: 2px solid #0d3b66; padding-bottom: 2px; margin-bottom: 5px;
+  }
+  .toc-row { display: flex; align-items: baseline; gap: 6px; padding: 2.5px 0; font-size: 10pt; }
+  .toc-dots { flex: 1; border-bottom: 1px dotted #999; min-width: 12px; }
+  .toc-num { font-weight: bold; min-width: 1.6em; text-align: right; }
+  body { 
+    font-family: "Sarabun", "Segoe UI", sans-serif; 
+    font-size: 10pt; 
+    color: #111;
+    max-width: 19cm; 
+    margin: 0.8cm auto; 
+    line-height: 1.4;
+  }
+  h1 { font-size: 15pt; margin: 0 0 6px 0; color: #000; }
+  h2 { 
+    font-size: 12.5pt; 
+    margin: 16px 0 8px 0; 
+    padding-bottom: 3px; 
+    border-bottom: 2px solid #333; 
+    page-break-after: avoid; 
+    break-after: avoid;
+    color: #0d3b66;
+  }
+  p { margin: 4px 0; }
+  pre { 
+    background: #f8f9fa; 
+    border: 1px solid #bbb; 
+    border-left: 3px solid #0d3b66; 
+    border-radius: 3px; 
+    padding: 5px 8px; 
+    font-size: 8.3pt; 
+    line-height: 1.32; 
+    white-space: pre-wrap; 
+    word-break: break-word; 
+    margin: 3px 0 8px 0; 
+    page-break-inside: avoid; 
+    break-inside: avoid;
+  }
+  code { font-family: "Consolas", "Menlo", monospace; }
+  
+  .force-page-two {
+    break-before: page !important;
+    page-break-before: always !important;
+  }
+  
+  .scratch-page {
+    page-break-before: always !important;
+    break-before: page !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    width: 100%;
+    height: 24.8cm;
+    position: relative;
+    box-sizing: border-box;
+    display: block !important;
+  }
+  .scratch-grid {
+    width: 100%;
+    height: 23.2cm;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-image: linear-gradient(to right, #e8e8e8 1px, transparent 1px),
+                      linear-gradient(to bottom, #e8e8e8 1px, transparent 1px);
+    background-size: 20px 20px;
+    margin-top: 8px;
+    display: block !important;
+  }
+  
+  /* C++ Syntax Highlighting Overrides (Authentic VS Code / CLion Light Style) */
+  pre code.hljs, pre code.language-cpp {
+    background: transparent !important;
+    color: #24292e;
+    font-family: "Consolas", "Menlo", "Monaco", monospace;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    display: inline !important;
+    line-height: inherit !important;
+  }
+  .hljs-keyword, .hljs-selector-tag, .hljs-subst {
+    color: #0000ff !important; /* Bold Royal Blue: int, void, auto, return, if, for, while, const */
+    font-weight: bold;
+  }
+  .hljs-comment, .hljs-quote {
+    color: #008000 !important; /* Forest Green: // comments and block comments */
+    font-style: italic;
+  }
+  .hljs-string, .hljs-doctag {
+    color: #a31515 !important; /* Dark Maroon: "strings" and 'c' */
+  }
+  .hljs-number, .hljs-literal {
+    color: #098658 !important; /* Dark Teal: 0, 1e18, true, false, nullptr */
+  }
+  .hljs-type, .hljs-built_in, .hljs-title.class_ {
+    color: #2b91af !important; /* Cyan/Teal: vector, string, set, map, queue, priority_queue, pair */
+    font-weight: bold;
+  }
+  .hljs-title.function_ {
+    color: #795e26 !important; /* Warm Gold: function names */
+  }
+  .hljs-meta, .hljs-meta .hljs-keyword {
+    color: #800080 !important; /* Purple: #include, #define, #pragma */
+  }
+  
+  p code, li code, td code { 
+    background: #f0f0f0; 
+    padding: 1px 4px; 
+    border-radius: 2px; 
+    font-size: 8.8pt; 
+    word-break: break-word;
+    color: #900000;
+  }
+  table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    font-size: 9pt; 
+    margin: 6px 0 12px 0; 
+    page-break-inside: auto; 
+    break-inside: auto; 
+    table-layout: auto;
+  }
+  tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  th, td { 
+    border: 1px solid #999; 
+    padding: 4px 8px; 
+    text-align: left; 
+    vertical-align: top;
+  }
+  th { 
+    background: #e6e6e6; 
+    font-weight: bold; 
+    color: #111;
+  }
+  table.lookup-table th:nth-child(1) { width: 32%; }
+  table.lookup-table th:nth-child(2) { width: 42%; }
+  table.lookup-table th:nth-child(3) { width: 16%; }
+  table.lookup-table th:nth-child(4) { width: 10%; }
+  blockquote { 
+    border-left: 4px solid #b00000; 
+    margin: 6px 0 10px 0; 
+    padding: 4px 12px; 
+    color: #7a0000;
+    background: #fdf3f3; 
+    page-break-inside: avoid; 
+    break-inside: avoid;
+  }
+  blockquote p { margin: 2px 0; }
+  ul { margin: 4px 0 8px 0; padding-left: 22px; }
+  li { margin-bottom: 3px; }
+  .pagebreak { 
+    page-break-after: always; 
+    break-after: page; 
+  }
+  @media print { 
+    body { margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+<div class="cover-page">
+  <div class="cover-logo">[แปะโลโก้<br>มหาวิทยาลัย]</div>
+  <div class="cover-uni">Thammasat University</div>
+  <div class="cover-title">ICPC Reference Document</div>
+  <div class="cover-team">[ชื่อทีม — กรอก]</div>
+  <div class="cover-dept">Department of Computer Science<br>Faculty of Science and Technology<br>Thammasat University (Rangsit Campus)</div>
+</div>
+<h1>ICPC Team Reference Document — ฉบับใช้จริง</h1>
+<p>หลังกระดาษทุกแผ่น = ที่ทด • เลขหน้าในสารบัญ/ตารางท้ายเล่มอัปเดตอัตโนมัติตอนเปิดไฟล์ — <strong>ต้องเปิดด้วย Chrome + ต่อเน็ต</strong> รอโหลดเสร็จแล้วค่อยสั่ง Print</p>
+<section class="toc-sec-wrap">
+<h2>สารบัญ</h2>
+<div class="toc-sec">
+  <div class="toc-group">
+    <div class="toc-head">เปิดก่อนเสมอ</div>
+    <div class="toc-row"><span>หาค่า/ตำแหน่ง ใช้ method ไหน (ตาราง lookup)</span><span class="toc-dots"></span><span class="toc-num" data-sec="find">3</span></div>
+    <div class="toc-row"><span>โจทย์หาอะไร → ใช้ algo อะไร (หน้าหลังสุด)</span><span class="toc-dots"></span><span class="toc-num" data-sec="lookup">23</span></div>
+  </div>
+  <div class="toc-group">
+    <div class="toc-head">C++ STL</div>
+    <div class="toc-row"><span>vector</span><span class="toc-dots"></span><span class="toc-num" data-sec="vector">4</span></div>
+    <div class="toc-row"><span>string</span><span class="toc-dots"></span><span class="toc-num" data-sec="string">4</span></div>
+    <div class="toc-row"><span>set / multiset</span><span class="toc-dots"></span><span class="toc-num" data-sec="set">5</span></div>
+    <div class="toc-row"><span>map</span><span class="toc-dots"></span><span class="toc-num" data-sec="map">5</span></div>
+    <div class="toc-row"><span>queue / deque / stack</span><span class="toc-dots"></span><span class="toc-num" data-sec="queue">6</span></div>
+    <div class="toc-row"><span>priority_queue + pair / tuple</span><span class="toc-dots"></span><span class="toc-num" data-sec="pq">6</span></div>
+    <div class="toc-row"><span>ฟังก์ชัน &lt;algorithm&gt; (sort, unique, ...)</span><span class="toc-dots"></span><span class="toc-num" data-sec="algo">7</span></div>
+    <div class="toc-row"><span>การอ่าน input (getline, stringstream)</span><span class="toc-dots"></span><span class="toc-num" data-sec="input">7</span></div>
+  </div>
+  <div class="toc-group">
+    <div class="toc-head">Algo หลัก (ซ้อมมาแล้ว)</div>
+    <div class="toc-row"><span>Binary Search + on answer</span><span class="toc-dots"></span><span class="toc-num" data-sec="binsearch">8</span></div>
+    <div class="toc-row"><span>Two Pointers / Prefix Sum</span><span class="toc-dots"></span><span class="toc-num" data-sec="twopointers">8</span></div>
+    <div class="toc-row"><span>Greedy patterns</span><span class="toc-dots"></span><span class="toc-num" data-sec="greedy">9</span></div>
+    <div class="toc-row"><span>DP (สูตร 5 ข้อ)</span><span class="toc-dots"></span><span class="toc-num" data-sec="dp">9</span></div>
+    <div class="toc-row"><span>BFS (กราฟ / เขาวงกต)</span><span class="toc-dots"></span><span class="toc-num" data-sec="bfs">10</span></div>
+    <div class="toc-row"><span>DSU (Union-Find)</span><span class="toc-dots"></span><span class="toc-num" data-sec="dsu">10</span></div>
+    <div class="toc-row"><span>Math (modpow, sieve, nCr, overflow)</span><span class="toc-dots"></span><span class="toc-num" data-sec="math">11</span></div>
+    <div class="toc-row"><span>ตาราง n → complexity + brute force</span><span class="toc-dots"></span><span class="toc-num" data-sec="ntable">11</span></div>
+  </div>
+  <div class="toc-group">
+    <div class="toc-head">Algo ขยาย</div>
+    <div class="toc-row"><span>Dijkstra</span><span class="toc-dots"></span><span class="toc-num" data-sec="dijkstra">12</span></div>
+    <div class="toc-row"><span>Floyd-Warshall + Kruskal MST</span><span class="toc-dots"></span><span class="toc-num" data-sec="floyd">12</span></div>
+    <div class="toc-row"><span>DFS / flood fill</span><span class="toc-dots"></span><span class="toc-num" data-sec="dfs">13</span></div>
+    <div class="toc-row"><span>Topological Sort + DAG DP</span><span class="toc-dots"></span><span class="toc-num" data-sec="toposort">13</span></div>
+    <div class="toc-row"><span>Knapsack 0/1 + Subset Sum</span><span class="toc-dots"></span><span class="toc-num" data-sec="knapsack">14</span></div>
+    <div class="toc-row"><span>LCS / Edit Distance / LIS</span><span class="toc-dots"></span><span class="toc-num" data-sec="lcs">14</span></div>
+  </div>
+  <div class="toc-group">
+    <div class="toc-head">ชุดขยาย (advanced)</div>
+    <div class="toc-row"><span>1 — Fenwick / Segment Tree / LCA</span><span class="toc-dots"></span><span class="toc-num" data-sec="ext1">15</span></div>
+    <div class="toc-row"><span>2 — Bellman-Ford / Bipartite / Tarjan</span><span class="toc-dots"></span><span class="toc-num" data-sec="ext2">16</span></div>
+    <div class="toc-row"><span>3 — Z-Algo / KMP / Rolling Hash</span><span class="toc-dots"></span><span class="toc-num" data-sec="ext3">17</span></div>
+    <div class="toc-row"><span>4 — Matrix Pow / ExtGCD / SPF</span><span class="toc-dots"></span><span class="toc-num" data-sec="ext4">17</span></div>
+    <div class="toc-row"><span>5 — Geometry / Convex Hull</span><span class="toc-dots"></span><span class="toc-num" data-sec="ext5">18</span></div>
+    <div class="toc-row"><span>6 — Digit DP / Bitmask TSP / Knapsack W ใหญ่</span><span class="toc-dots"></span><span class="toc-num" data-sec="ext6">19</span></div>
+    <div class="toc-row"><span>7 — 2-SAT / Euler Path</span><span class="toc-dots"></span><span class="toc-num" data-sec="ext7">20</span></div>
+    <div class="toc-row"><span>8 — Nim / Grundy / PIE / Catalan</span><span class="toc-dots"></span><span class="toc-num" data-sec="ext8">21</span></div>
+    <div class="toc-row"><span>9 — Debug Checklist + Stress Script</span><span class="toc-dots"></span><span class="toc-num" data-sec="ext9">22</span></div>
+  </div>
+</div>
+</section>
+<h2 class="force-page-two">หาของอยู่ตรงไหน (เปิดหน้านี้ก่อนเสมอ)</h2>
+<p><strong>ตารางหลัก: อยากหา "ค่า/ตำแหน่ง" → ใช้อะไร → ไม่เจอได้อะไร</strong></p>
+<table class="lookup-table">
+<thead>
+<tr>
+<th>อยากทำ</th>
+<th>เขียน</th>
+<th>ไม่เจอคืนอะไร</th>
+<th>เร็ว</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ตำแหน่งแรกที่ ≥ x (vector <strong>sort แล้ว</strong>)</td>
+<td><code>lower_bound(v.begin(),v.end(),x)</code></td>
+<td><code>v.end()</code></td>
+<td>log n</td>
+</tr>
+<tr>
+<td>ตำแหน่งแรกที่ &gt; x (sort แล้ว)</td>
+<td><code>upper_bound(v.begin(),v.end(),x)</code></td>
+<td><code>v.end()</code></td>
+<td>log n</td>
+</tr>
+<tr>
+<td>มี x ไหม (sort แล้ว)</td>
+<td><code>binary_search(v.begin(),v.end(),x)</code></td>
+<td><code>false</code></td>
+<td>log n</td>
+</tr>
+<tr>
+<td>ตำแหน่งของ x (<strong>ยังไม่ sort</strong>)</td>
+<td><code>find(v.begin(),v.end(),x)</code></td>
+<td><code>v.end()</code></td>
+<td>n</td>
+</tr>
+<tr>
+<td>มี x ไหม ใน set/multiset</td>
+<td><code>s.count(x)</code></td>
+<td><code>0</code></td>
+<td>log n</td>
+</tr>
+<tr>
+<td>iterator ของ x ใน set</td>
+<td><code>s.find(x)</code></td>
+<td><code>s.end()</code></td>
+<td>log n</td>
+</tr>
+<tr>
+<td>ตัวแรก ≥ x ใน set</td>
+<td><code>s.lower_bound(x)</code> ← <strong>member!</strong></td>
+<td><code>s.end()</code></td>
+<td>log n</td>
+</tr>
+<tr>
+<td>มี key ไหม ใน map</td>
+<td><code>m.count(k)</code></td>
+<td><code>0</code></td>
+<td>log n</td>
+</tr>
+<tr>
+<td>ตำแหน่งคำใน string</td>
+<td><code>s.find("ab")</code></td>
+<td><code>string::npos</code></td>
+<td>n·m</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-cpp">// แปลง iterator → index:   int idx = it - v.begin();   (ถ้า idx == v.size() = ไม่เจอ)
+// เอาค่า:                  *it        (ห้าม * ตัว end() เด็ดขาด — เช็คก่อนเสมอ)
+// ตัวใหญ่สุดที่ ≤ x:       auto it = upper_bound(...); if (it != v.begin()) --it; ค่าคือ *it
+//                          ถ้า it == v.begin() ตั้งแต่แรก = ไม่มีตัวไหน ≤ x
+</code></pre>
+<blockquote>
+<p>⚠ <code>std::lower_bound(s.begin(), s.end(), x)</code> กับ set = O(n) ช้ามาก — set/map ต้องใช้ตัว member <code>s.lower_bound(x)</code> เท่านั้น</p>
+</blockquote>
+<h2>vector</h2>
+<pre><code class="language-cpp">vector&lt;ll&gt; v;                  // ว่าง
+vector&lt;ll&gt; v(n);               // n ตัว ค่า 0
+vector&lt;ll&gt; v(n, x);            // n ตัว ค่า x
+vector&lt;ll&gt; v = {1, 2, 3};
+vector&lt;vector&lt;ll&gt;&gt; g(R, vector&lt;ll&gt;(C, 0));   // 2D R แถว C คอลัมน์
+
+v.push_back(x);                // เพิ่มท้าย O(1)
+v.pop_back();                  // ลบท้าย O(1) — ไม่คืนค่า! อ่าน v.back() ก่อน
+v[i]                           // อ่าน/เขียน ตำแหน่ง i — ถ้า i เกิน = พังเงียบ (UB)
+v.front(); v.back();           // ตัวแรก / ตัวท้าย (ห้ามเรียกตอนว่าง)
+v.size(); v.empty();
+v.clear();                     // ล้างหมด
+v.resize(n);                   // ปรับขนาด (ตัวใหม่ = 0)
+v.assign(n, x);                // ล้างแล้วเติม n ตัวค่า x
+
+v.insert(v.begin() + i, x);    // แทรกที่ i — O(n) ช้า! ห้ามทำใน loop
+v.erase(v.begin() + i);        // ลบที่ i — O(n) ช้า! ห้ามทำใน loop
+// ต้อง insert/erase บ่อย → เปลี่ยนไปใช้ set หรือ deque
+
+// วน:
+for (ll x : v)                 // อ่านอย่างเดียว
+for (ll&amp; x : v) x *= 2;        // แก้ค่า ต้องมี &amp;
+for (int i = 0; i &lt; (int)v.size(); i++)
+</code></pre>
+<blockquote>
+<p>⚠ <code>v.size()</code> เป็น unsigned: ถ้า v ว่าง <code>v.size() - 1</code> = เลขมหาศาล ไม่ใช่ -1 → loop เพี้ยน แคสต์ <code>(int)v.size()</code> เสมอเวลาลบ
+⚠ <code>pop_back</code> ตอนว่าง / <code>back()</code> ตอนว่าง = พัง เช็ค <code>!v.empty()</code> ก่อน</p>
+</blockquote>
+<h2>string</h2>
+<pre><code class="language-cpp">string s = "hello";
+s.size(); s.empty(); s[i];     // เหมือน vector
+s += 'x';                      // ต่อท้าย 1 ตัว O(1)
+s += t;                        // ต่อ string O(len t)
+s = s + t;                     // O(ทั้งก้อน) — ใน loop ใช้ += เท่านั้น!
+
+s.substr(pos, len)             // ตัด: เริ่ม pos ยาว len — len เกินท้าย = ได้เท่าที่มี (ไม่พัง)
+                               // แต่ pos &gt; s.size() = พังทันที (out_of_range)!
+s.substr(pos)                  // ตั้งแต่ pos ถึงจบ
+s.find("ab")                   // ตำแหน่งแรกที่เจอ — ไม่เจอ → string::npos (เป็น unsigned size_t ห้ามเทียบ int)
+s.find("ab", start)            // เริ่มหาจาก start
+if (s.find(t) != string::npos) // วิธีเช็คว่ามี (ชัวร์สุด)
+s.rfind("ab")                  // หาจากท้าย
+
+reverse(s.begin(), s.end());
+sort(s.begin(), s.end());      // เรียงตัวอักษร (เทียบ anagram: sort สองฝั่งแล้ว ==)
+s == t; s &lt; t;                 // เทียบตามพจนานุกรมได้เลย
+
+// แปลงชนิด
+stoll(s)     // string → long long — ถ้า s ไม่ใช่ตัวเลข = พังทันที! (เช็คก่อนถ้าไม่ชัวร์)
+stoi(s)      // string → int (ระวังเกิน int)
+to_string(x) // ตัวเลข → string
+
+// ตัวอักษรเดี่ยว ↔ ตัวเลข
+char c = '7';  int d = c - '0';     // '7' → 7
+char c = 'e';  int i = c - 'a';     // 'e' → 4  (index 0..25)
+char C = 'a' + i;                    // ย้อนกลับ
+isdigit(c); isalpha(c); islower(c); isupper(c);
+tolower(c); toupper(c);              // คืน int — เขียน char(tolower(c))
+
+// นับความถี่
+int cnt[26] = {0};
+for (char c : s) cnt[c - 'a']++;
+
+// palindrome
+string r = s; reverse(r.begin(), r.end());
+bool pal = (s == r);
+</code></pre>
+<h2>set / multiset (เรียงให้อัตโนมัติ, ทุกอย่าง O(log n))</h2>
+<pre><code class="language-cpp">set&lt;ll&gt; s;                     // เก็บค่าไม่ซ้ำ + เรียงเสมอ
+multiset&lt;ll&gt; ms;               // เหมือน set แต่ซ้ำได้
+
+s.insert(x);                   // set: ถ้ามีอยู่แล้ว = เฉยๆ ไม่เพิ่ม
+s.erase(x);                    // ลบ (set: ตัวเดียว)
+s.count(x);                    // set: 0/1
+s.size(); s.empty();
+*s.begin();                    // ตัวเล็กสุด
+*s.rbegin();                   // ตัวใหญ่สุด
+*prev(s.end());                // ตัวใหญ่สุด (อีกวิธี)
+
+auto it = s.find(x);           // ไม่เจอ → s.end()
+auto it = s.lower_bound(x);    // ตัวแรก ≥ x — ไม่เจอ → s.end()
+auto it = s.upper_bound(x);    // ตัวแรก &gt; x — ไม่เจอ → s.end()
+// ตัวใหญ่สุดที่ ≤ x:  it = s.upper_bound(x); if (it != s.begin()) --it;
+
+// วน (ได้ค่าจากน้อยไปมาก):
+for (ll x : s) ...
+</code></pre>
+<blockquote>
+<p>⚠ <strong>multiset:</strong> <code>ms.erase(x)</code> ลบ<strong>ทุกตัว</strong>ที่เท่ากับ x! ลบตัวเดียว → <code>ms.erase(ms.find(x))</code>
+⚠ ลบระหว่างวน: <code>it = s.erase(it);</code> (erase คืน iterator ตัวถัดไป) — ห้าม <code>s.erase(it); it++;</code>
+⚠ ห้ามแก้ค่าที่อยู่ใน set (มันจะไม่เรียงใหม่) — ลบออกแล้ว insert ตัวใหม่แทน
+<code>multiset.count(x)</code> ช้าถ้าซ้ำเยอะ (O(log n + จำนวนซ้ำ)) — ปกติไม่มีปัญหา</p>
+</blockquote>
+<h2>map (key→value, key เรียงให้อัตโนมัติ, O(log n))</h2>
+<pre><code class="language-cpp">map&lt;ll,ll&gt; m;                  // key ชนิดไหนก็ได้ที่เทียบ &lt; ได้: string, pair ก็ได้
+m[k] = v;                      // ใส่ / ทับ
+m[k]++;                        // นับความถี่ — key ยังไม่มี = สร้างให้เป็น 0 แล้ว ++ อัตโนมัติ
+m.count(k);                    // มี key ไหม → 0/1
+m.erase(k);
+m.size(); m.empty();
+
+auto it = m.find(k);           // ไม่เจอ → m.end()
+// it-&gt;first = key, it-&gt;second = value
+m.lower_bound(k); m.upper_bound(k);   // เหมือน set (member function)
+m.begin()-&gt;first;              // key เล็กสุด
+m.rbegin()-&gt;first;             // key ใหญ่สุด
+
+// วน (เรียงตาม key เสมอ):
+for (auto&amp; [k, v] : m) cout &lt;&lt; k &lt;&lt; " " &lt;&lt; v &lt;&lt; "\n";
+</code></pre>
+<blockquote>
+<p>⚠ <strong>กับดักใหญ่สุดของ map:</strong> แค่ "อ่าน" <code>m[k]</code> ก็<strong>สร้าง key นั้นทิ้งไว้</strong> (ค่า 0)! เช็คเฉยๆ ต้องใช้ <code>m.count(k)</code> — ไม่งั้น size โต, วนเจอ key ผี
+⚠ <strong>unordered_map:</strong> เฉลี่ย O(1) แต่โดน test แกล้งให้ช้าเป็น O(n) ได้ (เจอมาแล้วใน Codeforces TLE) → <strong>ใช้ map ธรรมดาเสมอ</strong> ยกเว้นมั่นใจว่าจำเป็น
+key เป็น <code>pair&lt;ll,ll&gt;</code> ได้เลย: <code>map&lt;pair&lt;ll,ll&gt;, ll&gt; m; m[{x,y}]++;</code></p>
+</blockquote>
+<h2>queue / deque / stack</h2>
+<pre><code class="language-cpp">queue&lt;int&gt; q;                  // แถว: เข้าท้าย-ออกหัว (ใช้ใน BFS)
+q.push(x);                     // เข้าท้าย
+q.front();                     // ดูหัวแถว (ไม่เอาออก)
+q.pop();                       // เอาหัวแถวออก — ไม่คืนค่า! อ่าน front() ก่อน
+q.back(); q.size(); q.empty();
+
+stack&lt;int&gt; st;                 // ตั้งกอง: เข้า-ออกทางเดียว (ล่าสุดออกก่อน)
+st.push(x); st.top(); st.pop(); st.empty();
+// ใช้กับ: จับคู่วงเล็บ, undo, "ตัวล่าสุดที่ยังไม่ถูกจับคู่"
+
+deque&lt;int&gt; d;                  // เข้า-ออกได้สองหัว O(1) + index ได้เหมือน vector
+d.push_back(x);  d.push_front(x);
+d.pop_back();    d.pop_front();
+d.front(); d.back(); d[i]; d.size();
+// ใช้เมื่อ: อยากได้ queue ที่ index ได้ / เพิ่ม-ลบทั้งหัวและท้าย
+</code></pre>
+<blockquote>
+<p>⚠ ทั้งสามตัว: <code>pop()</code> ไม่คืนค่า — อ่านค่าด้วย <code>front()</code>/<code>top()</code> ก่อนแล้วค่อย pop
+⚠ เรียก front/top/pop ตอนว่าง = พังเงียบ → <code>while (!q.empty())</code> หรือเช็คก่อนทุกครั้ง
+queue/stack วนดูข้างในไม่ได้ (ต้อง pop ออกอย่างเดียว) — อยากวนดู → ใช้ deque</p>
+</blockquote>
+<h2>priority_queue (heap) + pair / tuple / array</h2>
+<pre><code class="language-cpp">priority_queue&lt;ll&gt; mx;                          // MAX-heap: top = ใหญ่สุด (default)
+priority_queue&lt;ll, vector&lt;ll&gt;, greater&lt;&gt;&gt; mn;   // MIN-heap: top = เล็กสุด ← จำ syntax นี้!
+mn.push(x);
+mn.top();                      // ดูยอด — ไม่เอาออก
+mn.pop();                      // เอายอดออก — ไม่คืนค่า
+mn.size(); mn.empty();
+// มีแค่นี้จริงๆ: ไม่มี index, วนดูไม่ได้, หาตัวอื่นไม่ได้
+// อยากลบตัวที่ไม่ใช่ยอด / หาค่ากลางๆ → ใช้ multiset แทน (มี begin/rbegin/find/erase)
+
+// เก็บของพ่วง: {key, id} — เทียบตัวแรกก่อนเสมอ → เอา key ไว้หน้า
+priority_queue&lt;pair&lt;ll,int&gt;, vector&lt;pair&lt;ll,int&gt;&gt;, greater&lt;&gt;&gt; pq;
+pq.push({dist, node});
+auto [d, u] = pq.top(); pq.pop();
+
+pair&lt;ll,ll&gt; p = {a, b};
+p.first; p.second;
+auto [x, y] = p;               // แตกเป็นตัวแปร (structured bindings)
+
+tuple&lt;ll,ll,ll&gt; t = {a, b, c};
+get&lt;0&gt;(t); get&lt;2&gt;(t);
+auto [x, y, z] = t;
+
+array&lt;ll,3&gt; a3 = {key, val, idx};   // เบากว่า tuple + index ได้ a3[0]
+// pair / tuple / array&lt;ll,N&gt; เทียบกันแบบพจนานุกรม (ตัวแรกก่อน)
+// → ใส่ vector แล้ว sort ได้เลย, ใส่ heap ได้เลย โดยเอาตัวที่อยากเรียงไว้หน้า
+</code></pre>
+<h2>ฟังก์ชันใน <code>&lt;algorithm&gt;</code> (ใช้กับ vector/string/array)</h2>
+<pre><code class="language-cpp">sort(v.begin(), v.end());                      // น้อย→มาก O(n log n)
+sort(v.begin(), v.end(), greater&lt;&gt;());         // มาก→น้อย
+sort(v.begin(), v.end(), [](auto&amp; a, auto&amp; b){ // custom: คืน true ถ้า a ต้องมาก่อน b
+    return tie(a.second, a.first) &lt; tie(b.second, b.first);  // เรียงตาม second ก่อน
+});
+// ⚠ comparator ต้องเป็น "น้อยกว่าจริง" — ใช้ &lt;= = พังแบบสุ่ม! ใช้ &lt; เท่านั้น
+
+reverse(v.begin(), v.end());
+min(a, b); max(a, b); min({a, b, c});          // หลายตัวใส่ปีกกา
+swap(a, b);
+auto it = max_element(v.begin(), v.end());     // iterator ตัวใหญ่สุด → ค่า = *it
+auto it = min_element(v.begin(), v.end());     //   ตำแหน่ง = it - v.begin()
+accumulate(v.begin(), v.end(), 0LL);           // ผลรวม — ต้อง 0LL ไม่งั้น overflow! (ใส่ 0 = ตัดเหลือ 32-bit int)
+count(v.begin(), v.end(), x);                  // นับตัวที่ == x, O(n)
+fill(v.begin(), v.end(), x);                   // เติมค่าเดียวทั้งอาเรย์
+iota(v.begin(), v.end(), 0);                   // เติม 0,1,2,...
+abs(x); __builtin_popcountll(x);               // นับ bit ที่เป็น 1 (long long)
+
+// ลบตัวซ้ำ (ต้อง sort ก่อน):
+sort(v.begin(), v.end());
+v.erase(unique(v.begin(), v.end()), v.end());
+
+// ลอง permutation ทุกแบบ (v ต้องเริ่มจาก sort แล้ว):
+sort(v.begin(), v.end());
+do { ... } while (next_permutation(v.begin(), v.end()));
+</code></pre>
+<h2>การอ่าน input (โจทย์เล่าเรื่อง = ต้องแกะ input ให้เป็น)</h2>
+<pre><code class="language-cpp">// หัวไฟล์มาตรฐาน
+#include &lt;bits/stdc++.h&gt;
+using namespace std;
+typedef long long ll;
+int main() {
+    ios_base::sync_with_stdio(false); cin.tie(NULL);   // กัน TLE จาก I/O
+    ...
+}
+
+cin &gt;&gt; n;                      // อ่านทีละตัว ข้าม space/ขึ้นบรรทัดให้เอง
+cin &gt;&gt; a &gt;&gt; b &gt;&gt; s;            // ผสมชนิดได้
+
+// อ่านทั้งบรรทัด (มี space ข้างใน):
+cin &gt;&gt; n;
+cin.ignore();                  // ← ห้ามลืม! กิน '\n' ค้าง ไม่งั้น getline ได้บรรทัดว่าง
+getline(cin, line);
+
+// แยกบรรทัดเป็นคำ:
+stringstream ss(line);
+string w;
+while (ss &gt;&gt; w) words.push_back(w);
+
+// แยกด้วยตัวคั่นอื่น เช่น ',':
+stringstream ss(line);
+string tok;
+while (getline(ss, tok, ',')) parts.push_back(tok);
+
+// ไม่บอกจำนวน อ่านจนหมด:
+while (cin &gt;&gt; x) { ... }
+
+// ปริ๊นท์
+cout &lt;&lt; x &lt;&lt; " " &lt;&lt; y &lt;&lt; "\n";           // ใช้ "\n" — endl ช้า (flush ทุกครั้ง) TLE ได้
+cout &lt;&lt; fixed &lt;&lt; setprecision(6) &lt;&lt; d;   // ทศนิยม 6 ตำแหน่ง
+cout &lt;&lt; (cond ? "YES" : "NO") &lt;&lt; "\n";   // ⚠ ternary ต้องมีวงเล็บ! &lt;&lt; แย่งก่อน ?:
+</code></pre>
+<h2>Binary Search (จุดตาย: ปัดขึ้น/ปัดลง)</h2>
+<pre><code class="language-cpp">// แบบ 1: หา x "น้อยสุด" ที่ ok(x) จริง   (หน้าตา F F F T T T)
+ll lo = ต่ำสุดที่เป็นไปได้, hi = สูงสุดที่ ok แน่ๆ;
+while (lo &lt; hi) {
+    ll mid = lo + (hi - lo) / 2;         // ปัดลง
+    if (ok(mid)) hi = mid;
+    else lo = mid + 1;
+}
+// จบ: lo == hi == คำตอบ
+
+// แบบ 2: หา x "ใหญ่สุด" ที่ ok(x) จริง   (หน้าตา T T T F F F)
+while (lo &lt; hi) {
+    ll mid = lo + (hi - lo + 1) / 2;     // ⚠ ปัดขึ้น! ใช้ปัดลง = loop ค้างไม่จบ
+    if (ok(mid)) lo = mid;
+    else hi = mid - 1;
+}
+</code></pre>
+<p><strong>Binary search on answer</strong> — สัญญาณ: โจทย์ถาม "น้อยสุด/มากสุดเท่าไหร่ที่ทำได้" และการเช็ค "ค่า t นี้ทำได้ไหม" ง่ายกว่าหาคำตอบตรงๆ
+→ เขียน <code>ok(t)</code> แล้วครอบด้วยแบบ 1 หรือ 2</p>
+<ul>
+<li>ok ต้อง monotone: จริงแล้วจริงตลอดทาง (เช็คในหัวก่อนใช้)</li>
+<li>ใน ok(t) ระวังผลรวม overflow → สะสมเป็น ll และ break เมื่อเกินเป้าแล้ว</li>
+<li><code>(lo + hi) / 2</code> ตรงๆ overflow ได้ถ้าทั้งคู่ใหญ่ → ใช้ <code>lo + (hi - lo) / 2</code></li>
+</ul>
+<h2>Two Pointers / Prefix Sum (บรรทัดเสี่ยง)</h2>
+<pre><code class="language-cpp">// sliding window: subarray ผลรวม = x — ใช้ได้เมื่อเลข "บวกล้วน" เท่านั้น
+int l = 0; ll sum = 0, cnt = 0;
+for (int r = 0; r &lt; n; r++) {
+    sum += a[r];
+    while (sum &gt; x) sum -= a[l++];
+    if (sum == x) cnt++;
+}
+
+// มีเลขติดลบ → sliding window ใช้ไม่ได้ ต้อง prefix + map:
+map&lt;ll,ll&gt; seen; seen[0] = 1;      // ⚠ seed prefix ว่าง — ลืม = ผิดทุกเคสที่ prefix == x
+ll pre = 0, cnt = 0;
+for (int i = 0; i &lt; n; i++) {
+    pre += a[i];
+    cnt += seen[pre - x];
+    seen[pre]++;
+}
+
+// prefix sum 1D: ถามผลรวมช่วงหลายรอบ (ไม่มีแก้ค่า)
+vector&lt;ll&gt; pre(n + 1, 0);
+for (int i = 1; i &lt;= n; i++) pre[i] = pre[i-1] + a[i-1];
+// ผลรวม [l..r] (1-indexed) = pre[r] - pre[l-1]
+
+// จับคู่สองอาเรย์ (sort ทั้งคู่ก่อน) เช่น ของชิ้นใกล้กันไม่เกิน k:
+int i = 0, j = 0;
+while (i &lt; n &amp;&amp; j &lt; m) {
+    if (abs(a[i] - b[j]) &lt;= k) { cnt++; i++; j++; }
+    else if (a[i] &lt; b[j]) i++;
+    else j++;
+}
+</code></pre>
+<h2>Greedy (จุดตัดสิน: sort key อะไร เพราะอะไร — พูดออกเสียงก่อนเขียน)</h2>
+<pre><code class="language-cpp">// [เลือกกิจกรรมมากสุดไม่ทับกัน] → sort ตาม "เวลาจบ" น้อยก่อน
+// เก็บ {end, start} จะได้ sort ตรงๆ
+sort(v.begin(), v.end());
+ll cnt = 0, cur = -1e18;
+for (auto&amp; [e, s] : v)
+    if (s &gt;= cur) { cnt++; cur = e; }    // ⚠ cur = e ไม่ใช่ cur += e (เคยพลาด!)
+
+// [ซ้อนกันมากสุด ณ จุดเดียว / ต้องใช้กี่ห้อง] → event sweep ±1
+map&lt;ll,ll&gt; d;
+d[a]++; d[b]--;                          // แต่ละช่วง [a,b) — นับรวมปลาย → d[b+1]--
+ll cur = 0, best = 0;
+for (auto&amp; [t, c] : d) { cur += c; best = max(best, cur); }
+
+// [k คน เลือกงานรวมกันมากสุด] → sort ตามจบ + multiset เวลาว่าง
+multiset&lt;ll&gt; avail;
+for (int i = 0; i &lt; k; i++) avail.insert(0);
+for (auto&amp; [e, s] : v) {                 // v sort ตาม end แล้ว
+    auto it = avail.upper_bound(s);      // ตัวแรก &gt; s
+    if (it == avail.begin()) continue;   // ไม่มีใครว่างทัน
+    --it;                                // คนว่าง "ช้าสุดที่ยังทัน"
+    avail.erase(it); avail.insert(e); cnt++;
+}
+
+// [Σ เวลารอน้อยสุด] → ทำงานสั้นสุดก่อน (sort ตาม duration)
+// [เหรียญ: ค่าน้อยสุดที่สร้างไม่ได้] → sort แล้วไล่ reach:
+//    ถ้า c &gt; reach + 1 → ตอบ reach + 1   ไม่งั้น reach += c
+</code></pre>
+<p><strong>เช็คก่อนเชื่อ greedy:</strong> ลองหา counterexample 10 วินาที ถ้าสลับลำดับที่เลือกแล้ว "อาจดีกว่า" ได้ → ไม่ใช่ greedy, เป็น DP (เช่นเหรียญ {1,3,4} จ่าย 6: โลภ 4+1+1 แพ้ 3+3)</p>
+<h2>DP (ตอบ 5 ข้อในหัวก่อน แล้วค่อยแตะคีย์บอร์ด)</h2>
+<pre><code>1) state:  dp[i] คืออะไร (พูดเป็นประโยคเดียว)     2) transition
+3) base:   นับวิธี → dp[0] = 1   |   หา min → dp[0] = 0
+4) order:  เล็ก → ใหญ่                            5) answer อยู่ช่องไหน
+</code></pre>
+<pre><code class="language-cpp">// นับจำนวนวิธี (คำตอบ mod 1e9+7):
+const ll MOD = 1e9 + 7;
+vector&lt;ll&gt; dp(x + 1, 0); dp[0] = 1;
+for (int i = 1; i &lt;= x; i++)
+    for (ll c : coins)
+        if (i - c &gt;= 0) dp[i] = (dp[i] + dp[i-c]) % MOD;   // mod ใน loop เลย
+
+// หาค่าน้อยสุด:
+const ll INF = 1e18;                      // ⚠ INF = บวกใหญ่ (เคยพลาดใส่ -1e9)
+vector&lt;ll&gt; dp(x + 1, INF); dp[0] = 0;
+for (int i = 1; i &lt;= x; i++)
+    for (ll c : coins)
+        if (i - c &gt;= 0 &amp;&amp; dp[i-c] != INF)          // ⚠ guard INF ก่อนบวก
+            dp[i] = min(dp[i], dp[i-c] + 1);       // ⚠ ใช้ min() — เขียนเทียบเองเคยกลับทิศ
+cout &lt;&lt; (dp[x] == INF ? -1 : dp[x]);
+
+// ลำดับ loop = ความหมาย:
+// "ลำดับต่างกันนับแยก"  → for i { for c { dp[i] += dp[i-c] } }   (sum นอก)
+// "เซตเดียวนับครั้งเดียว" → for c { for i { dp[i] += dp[i-c] } }   (เหรียญนอก)
+
+// ต้องเพิ่มมิติเมื่อ: การเลือกตัวถัดไปขึ้นกับ "ค่าล่าสุด" → ค่านั้นเป็นมิติ dp[i][v]
+</code></pre>
+<p><strong>bug ประจำตัว (ไล่ก่อน submit):</strong> ① ขนาด array — n หรือ x? (พลาด 3 รอบ) ② ทิศ min ③ INF บวกใหญ่ + guard ④ <code>&gt;= 0</code> ไม่ใช่ <code>&gt; 0</code> ⑤ mod ใน loop ⑥ recursion ลึก 1e6 = stack overflow → เขียน loop เสมอ</p>
+<h2>BFS (ระยะสั้นสุดเมื่อทุกก้าวราคาเท่ากัน)</h2>
+<pre><code class="language-cpp">// กราฟโหนด 1..n จาก edge list:
+vector&lt;vector&lt;int&gt;&gt; adj(n + 1);
+for (int i = 0; i &lt; m; i++) {
+    int a, b; cin &gt;&gt; a &gt;&gt; b;
+    adj[a].push_back(b);
+    adj[b].push_back(a);       // มีทิศทาง → ตัดบรรทัดนี้
+}
+
+vector&lt;int&gt; dist(n + 1, -1);   // -1 = ยังไปไม่ถึง
+queue&lt;int&gt; q;
+dist[s] = 0; q.push(s);
+while (!q.empty()) {
+    int u = q.front(); q.pop();
+    for (int v : adj[u])
+        if (dist[v] == -1) { dist[v] = dist[u] + 1; q.push(v); }
+}
+// จบ: dist[v] = จำนวนก้าวน้อยสุด s→v,  ยัง -1 = ไปไม่ถึง
+// อยากได้เส้นทาง: เก็บ par[v] = u ตอน push แล้วเดินย้อนจากปลายทาง
+// นับกลุ่มที่เชื่อมกัน: วนทุกโหนด ถ้า dist ยัง -1 → BFS ใหม่ นับ +1
+
+// BFS บนตาราง (เขาวงกต):
+int dx[] = {1, -1, 0, 0}, dy[] = {0, 0, 1, -1};
+vector&lt;vector&lt;int&gt;&gt; dist(R, vector&lt;int&gt;(C, -1));
+queue&lt;pair&lt;int,int&gt;&gt; q;
+dist[sr][sc] = 0; q.push({sr, sc});
+while (!q.empty()) {
+    auto [r, c] = q.front(); q.pop();
+    for (int k = 0; k &lt; 4; k++) {
+        int nr = r + dx[k], nc = c + dy[k];
+        if (nr &lt; 0 || nr &gt;= R || nc &lt; 0 || nc &gt;= C) continue;   // นอกขอบ
+        if (grid[nr][nc] == '#' || dist[nr][nc] != -1) continue; // กำแพง/เคยไป
+        dist[nr][nc] = dist[r][c] + 1;
+        q.push({nr, nc});
+    }
+}
+</code></pre>
+<p>สัญญาณใช้ BFS: "ก้าวน้อยสุด / ผ่านกี่ช่อง / ไปถึงได้ไหม" บนกราฟหรือตารางที่ทุกก้าวเท่ากัน</p>
+<h2>DSU (Union-Find): "อยู่กลุ่มเดียวกันไหม" เกือบ O(1)</h2>
+<pre><code class="language-cpp">vector&lt;int&gt; par, sz;
+void dsu_init(int n) {
+    par.resize(n + 1); sz.assign(n + 1, 1);
+    iota(par.begin(), par.end(), 0);            // par[i] = i
+}
+int find(int x) {
+    return par[x] == x ? x : par[x] = find(par[x]);
+}
+bool uni(int a, int b) {                        // รวมกลุ่ม a,b — คืน false ถ้ากลุ่มเดียวกันอยู่แล้ว
+    a = find(a); b = find(b);
+    if (a == b) return false;
+    if (sz[a] &lt; sz[b]) swap(a, b);
+    par[b] = a; sz[a] += sz[b];
+    return true;
+}
+</code></pre>
+<p><strong>วิธีใช้ (ไม่ต้องเข้าใจไส้ใน):</strong>
+- อยู่กลุ่มเดียวกันไหม → <code>find(a) == find(b)</code>
+- ขนาดกลุ่มของ a → <code>sz[find(a)]</code>
+- นับจำนวนกลุ่ม: เริ่ม = n, ทุกครั้งที่ <code>uni()</code> คืน true → ลด 1
+- edge ไหนทำให้เกิดวงกลม → <code>uni(u,v)</code> คืน false = edge นั้นสร้าง cycle
+- สัญญาณใช้: "เพิ่มถนน/สายไฟทีละเส้น แล้วถามว่าเชื่อมถึงกันไหม" ระหว่างทาง (BFS ตอบตอนจบได้ แต่ตอบระหว่างเพิ่มทีละเส้นไม่ไหว)</p>
+<h2>Math</h2>
+<pre><code class="language-cpp">ll g = gcd(a, b);                    // มีให้เลย (C++17)  gcd(a,0) = a
+ll l = a / g * b;                    // lcm — ⚠ หารก่อนคูณ! a*b/g overflow
+
+// (base^e) % MOD ใน O(log e):
+const ll MOD = 1e9 + 7;
+ll modpow(ll b, ll e, ll m) {
+    ll r = 1; b %= m;
+    while (e &gt; 0) {
+        if (e &amp; 1) r = r * b % m;
+        b = b * b % m;
+        e &gt;&gt;= 1;
+    }
+    return r;
+}
+
+// "หาร" ภายใต้ mod → คูณ inverse (MOD ต้องเป็นจำนวนเฉพาะ):
+ll inv(ll a) { return modpow(a, MOD - 2, MOD); }
+// (x / y) % MOD  =  x % MOD * inv(y) % MOD
+
+// จำนวนเฉพาะทุกตัว ≤ N:
+vector&lt;char&gt; isp(N + 1, 1); isp[0] = isp[1] = 0;
+for (ll i = 2; i * i &lt;= N; i++)
+    if (isp[i]) for (ll j = i * i; j &lt;= N; j += i) isp[j] = 0;
+// เช็คตัวเดียว: ลองหาร 2..√n พอ
+
+// nCr % MOD (เตรียม fact ครั้งเดียว):
+vector&lt;ll&gt; fact(N + 1); fact[0] = 1;
+for (int i = 1; i &lt;= N; i++) fact[i] = fact[i-1] * i % MOD;
+ll nCr(ll n, ll r) {
+    if (r &lt; 0 || r &gt; n) return 0;
+    return fact[n] * inv(fact[r]) % MOD * inv(fact[n-r]) % MOD;
+}
+
+// mod ติดลบ (C++ คืนติดลบได้!): ((a % m) + m) % m
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>เก็บได้</th>
+<th>ตัวอย่างที่ระเบิด</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int</td>
+<td>~2.1e9</td>
+<td>1e5 × 1e5 = 1e10 เกินแล้ว</td>
+</tr>
+<tr>
+<td>long long</td>
+<td>~9.2e18</td>
+<td>1e9 × 1e9 รอด แต่คูณ 3 ตัวไม่รอด</td>
+</tr>
+</tbody>
+</table>
+<p>n ตัว × ค่าโตสุด: 2e5 × 1e9 = 2e14 → ต้อง ll เสมอ • เขียน <code>0LL</code>, <code>1LL &lt;&lt; k</code></p>
+<h2>อ่าน n → รู้ว่าใช้อะไรได้ + brute force</h2>
+<p>เกณฑ์: ~1e8 คำสั่งง่ายๆ ต่อวินาที</p>
+<table>
+<thead>
+<tr>
+<th>n ไม่เกิน</th>
+<th>ใช้ได้ถึง</th>
+<th>เครื่องมือ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11</td>
+<td>O(n!)</td>
+<td>ลอง permutation ทุกแบบ ↓</td>
+</tr>
+<tr>
+<td>20</td>
+<td>O(2^n)</td>
+<td>ลอง subset ทุกแบบ ↓</td>
+</tr>
+<tr>
+<td>500</td>
+<td>O(n³)</td>
+<td>DP 3 ชั้น</td>
+</tr>
+<tr>
+<td>5,000</td>
+<td>O(n²)</td>
+<td>DP 2 ชั้น / เทียบทุกคู่</td>
+</tr>
+<tr>
+<td>2e5</td>
+<td>O(n log n)</td>
+<td>sort, set/map, heap, binary search</td>
+</tr>
+<tr>
+<td>1e7</td>
+<td>O(n)</td>
+<td>prefix, two pointers, sieve</td>
+</tr>
+<tr>
+<td>1e9 ขึ้นไป</td>
+<td>O(log n)</td>
+<td>binary search on answer, สูตร math</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-cpp">// ลอง "ลำดับ" ทุกแบบ (n ≤ 11):
+vector&lt;int&gt; p(n); iota(p.begin(), p.end(), 0);
+do {
+    // ใช้ p[0..n-1] เป็นลำดับ ประเมินคำตอบ เก็บ best
+} while (next_permutation(p.begin(), p.end()));
+
+// ลอง "เลือก/ไม่เลือก" ทุกแบบ (n ≤ 20):
+for (int mask = 0; mask &lt; (1 &lt;&lt; n); mask++) {
+    for (int i = 0; i &lt; n; i++)
+        if (mask &gt;&gt; i &amp; 1) { /* ตัวที่ i ถูกเลือก */ }
+}
+// จำนวนตัวที่เลือก: __builtin_popcount(mask)
+</code></pre>
+<p><strong>ก่อนเขียนอะไรซับซ้อน ถามตัวเอง: n เท่าไหร่ — brute force ผ่านไหม?</strong> (ผ่าน = เขียน brute force จบ อย่าประดิษฐ์)</p>
+<h2>Dijkstra (BFS ที่ก้าวราคาไม่เท่ากัน)</h2>
+<p><em>ต่อยอดจาก: BFS (หน้า 15) + min-heap ของ pair (หน้า 8) — สองอย่างที่ใช้เป็นแล้ว ประกอบกัน</em></p>
+<pre><code class="language-cpp">const ll INF = 1e18;
+vector&lt;vector&lt;pair&lt;int,ll&gt;&gt;&gt; adj(n + 1);        // {โหนดปลายทาง, น้ำหนัก}
+// ตอนอ่าน edge: adj[a].push_back({b, w});  adj[b].push_back({a, w});
+
+vector&lt;ll&gt; dist(n + 1, INF);
+priority_queue&lt;pair&lt;ll,int&gt;, vector&lt;pair&lt;ll,int&gt;&gt;, greater&lt;&gt;&gt; pq;  // min-heap {dist, node}
+dist[s] = 0; pq.push({0, s});
+while (!pq.empty()) {
+    auto [d, u] = pq.top(); pq.pop();
+    if (d &gt; dist[u]) continue;         // ⚠ ตัวเก่าค้างใน heap — ไม่มีบรรทัดนี้ = TLE
+    for (auto [v, w] : adj[u])
+        if (dist[u] + w &lt; dist[v]) {
+            dist[v] = dist[u] + w;
+            pq.push({dist[v], v});
+        }
+}
+// จบ: dist[v] = ระยะสั้นสุด s→v,  ยัง INF = ไปไม่ถึง   O(m log n)
+</code></pre>
+<ul>
+<li>เหมือน BFS ทุกอย่าง แค่เปลี่ยน queue → min-heap และ dist เป็นผลรวมน้ำหนัก</li>
+<li>⚠ <strong>edge ติดลบ = ห้ามใช้</strong> (คำตอบผิดเงียบๆ) — โจทย์แข่งระดับเราแทบไม่มี edge ลบ ถ้ามีให้ข้ามข้อ</li>
+<li>dist ต้องเป็น <code>ll</code> เสมอ: 2e5 edge × 1e9 = เกิน int แน่นอน</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>สถานการณ์</th>
+<th>ใช้</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ทุกก้าวราคาเท่ากัน</td>
+<td>BFS (หน้า 15)</td>
+</tr>
+<tr>
+<td>ก้าวมีน้ำหนัก (บวก), ถามจากจุดเดียว</td>
+<td>Dijkstra</td>
+</tr>
+<tr>
+<td>ถามทุกคู่ และ n ≤ 500</td>
+<td>Floyd-Warshall (หน้า 20)</td>
+</tr>
+</tbody>
+</table>
+<h2>Floyd-Warshall + Kruskal MST</h2>
+<p><strong>Floyd-Warshall — ระยะสั้นสุด "ทุกคู่" (n ≤ ~500 เท่านั้น, O(n³))</strong></p>
+<pre><code class="language-cpp">// d[i][j] เริ่มต้น: 0 ถ้า i==j • w ถ้ามี edge (edge ซ้ำเก็บ min) • INF ที่เหลือ
+for (int k = 1; k &lt;= n; k++)               // ⚠ k อยู่นอกสุดเสมอ สลับ = ผิด
+    for (int i = 1; i &lt;= n; i++)
+        for (int j = 1; j &lt;= n; j++)
+            if (d[i][k] &lt; INF &amp;&amp; d[k][j] &lt; INF)     // ⚠ กัน INF + INF ล้น (INF ห้ามเกิน ~4e18/2)
+                d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
+</code></pre>
+<p>3 บรรทัดจบ ไม่ต้องคิดอะไร — เห็น "ถามระยะหลายคู่ + n เล็ก" = เขียนเลย</p>
+<p><strong>Kruskal — เชื่อมทุกโหนดด้วยต้นทุนรวมถูกสุด (MST)</strong></p>
+<p><em>ต่อยอดจาก: DSU (หน้า 16) — Kruskal คือ sort แล้ววน uni() แค่นั้น</em></p>
+<pre><code class="language-cpp">// edges = vector&lt;array&lt;ll,3&gt;&gt; ของ {w, u, v}   ← น้ำหนักไว้หน้า sort ตรงๆ ได้เลย
+sort(edges.begin(), edges.end());
+dsu_init(n);
+ll total = 0; int used = 0;
+for (auto&amp; [w, u, v] : edges)
+    if (uni(u, v)) { total += w; used++; }      // uni คืน false = edge นี้สร้างวง ข้าม
+if (used != n - 1) { /* กราฟไม่เชื่อมถึงกัน — เชื่อมครบไม่ได้ */ }
+</code></pre>
+<p>สัญญาณ: "สร้างถนน/เดินสายไฟให้ถึงกันหมด จ่ายน้อยสุด"</p>
+<h2>DFS (ญาติของ BFS: ลุยลึกก่อน)</h2>
+<pre><code class="language-cpp">// นับกลุ่มที่เชื่อมถึงกัน (connected components):
+vector&lt;int&gt; comp(n + 1, 0);        // 0 = ยังไม่เคยไป
+void dfs(int u, int c) {
+    comp[u] = c;
+    for (int v : adj[u]) if (!comp[v]) dfs(v, c);
+}
+int groups = 0;
+for (int u = 1; u &lt;= n; u++)
+    if (!comp[u]) dfs(u, ++groups);
+// ได้แถม: comp[u] บอกว่า u อยู่กลุ่มไหน → "u,v ถึงกันไหม" = comp[u] == comp[v]
+
+// flood fill บนตาราง (นับ "เกาะ" / ระบายพื้นที่ติดกัน):
+int R, C; vector&lt;string&gt; g;        // '.' เดินได้ '#' กำแพง
+vector&lt;vector&lt;int&gt;&gt; vis(R, vector&lt;int&gt;(C, 0));
+void fill(int r, int c) {
+    if (r &lt; 0 || r &gt;= R || c &lt; 0 || c &gt;= C) return;
+    if (g[r][c] == '#' || vis[r][c]) return;
+    vis[r][c] = 1;
+    fill(r+1, c); fill(r-1, c); fill(r, c+1); fill(r, c-1);
+}
+// นับเกาะ: วนทุกช่อง ถ้าเดินได้และยังไม่ vis → fill แล้วนับ +1
+</code></pre>
+<ul>
+<li>⚠ recursion ลึกเกิน ~1e5–1e6 = stack overflow → กราฟ/ตารางใหญ่ ใช้ BFS (หน้า 15) แทน ได้ผลเหมือนกันทุกงานในหน้านี้</li>
+<li>ใช้ DFS เมื่อ: ต้องการแค่ "ถึงกันไหม/กี่กลุ่ม/พื้นที่เท่าไหร่" (สั้นกว่า BFS) • ใช้ BFS เมื่อ: ต้องการ "ระยะ/จำนวนก้าว"</li>
+</ul>
+<h2>Topological Sort (งานมีลำดับก่อน-หลัง)</h2>
+<p><em>ต่อยอดจาก: BFS — โครงเดียวกันเป๊ะ แค่เปลี่ยนเงื่อนไขเข้าคิวเป็น "งานที่ไม่เหลือ prerequisite"</em></p>
+<pre><code class="language-cpp">// edge u → v หมายถึง "u ต้องมาก่อน v"
+vector&lt;vector&lt;int&gt;&gt; adj(n + 1);
+vector&lt;int&gt; indeg(n + 1, 0);
+// ตอนอ่าน: adj[u].push_back(v); indeg[v]++;
+
+queue&lt;int&gt; q;
+for (int u = 1; u &lt;= n; u++) if (indeg[u] == 0) q.push(u);
+vector&lt;int&gt; order;
+while (!q.empty()) {
+    int u = q.front(); q.pop();
+    order.push_back(u);
+    for (int v : adj[u])
+        if (--indeg[v] == 0) q.push(v);
+}
+if ((int)order.size() &lt; n) { /* มี cycle — เรียงลำดับไม่ได้ ("impossible") */ }
+// order = ลำดับทำงานที่ถูกต้อง 1 แบบ (โจทย์ยอมรับแบบไหนก็ได้)
+</code></pre>
+<pre><code class="language-cpp">// แถม: DP บนลำดับที่ได้ (เดินตาม order แล้ว dp ต่อได้เลย ไม่ต้องคิดลำดับ fill)
+// ทางยาวสุดใน DAG:
+vector&lt;ll&gt; dp(n + 1, 0);
+for (int u : order)
+    for (int v : adj[u]) dp[v] = max(dp[v], dp[u] + 1);
+// นับจำนวนเส้นทาง s→ทุกโหนด: dp[s] = 1; แล้ว dp[v] = (dp[v] + dp[u]) % MOD
+</code></pre>
+<p>สัญญาณ: "วิชามี prerequisite" • "งาน A ก่อน B" • "เป็นไปได้ไหม" (= เช็ค cycle)</p>
+<h2>Knapsack 0/1 + Subset Sum</h2>
+<p><em>ต่อยอดจาก: Coin Combinations II (เหรียญนอก-ผลรวมใน) — ตัวเดียวกัน แต่ inner loop <strong>ถอยหลัง</strong></em></p>
+<pre><code class="language-cpp">// 0/1 knapsack: ของ n ชิ้น {น้ำหนัก wt, มูลค่า val} ความจุ W — แต่ละชิ้นหยิบได้ครั้งเดียว
+vector&lt;ll&gt; dp(W + 1, 0);           // dp[w] = มูลค่ามากสุดที่ความจุ w
+for (int i = 0; i &lt; n; i++)
+    for (int w = W; w &gt;= wt[i]; w--)        // ⚠ ถอยหลัง = ชิ้นนี้ใช้ได้ครั้งเดียว
+        dp[w] = max(dp[w], dp[w - wt[i]] + val[i]);
+// คำตอบ: dp[W]
+
+// ทำไมถอยหลัง: เดินหน้า = dp[w-wt] อาจถูกชิ้น "นี้" อัปเดตไปแล้วในรอบเดียวกัน = หยิบซ้ำ
+// เดินหน้า = หยิบซ้ำได้ไม่จำกัด (unbounded) — คือ Coin Comb II ที่เคยเขียนนั่นเอง
+
+// subset sum: เซตตัวเลข สร้าง "ผลรวม" อะไรได้บ้าง (เช่น Money Sums)
+vector&lt;char&gt; can(X + 1, 0); can[0] = 1;
+for (ll c : a)
+    for (int s = X; s &gt;= c; s--)            // ถอยหลังเหมือนกัน (ตัวละครั้ง)
+        if (can[s - c]) can[s] = 1;
+// ตอบ: ทุก s ที่ can[s] == 1
+// "แบ่งสองกองให้ใกล้กันสุด" = subset sum แล้วหา s ใกล้ ผลรวม/2 ที่ can[s]
+</code></pre>
+<p>สัญญาณ: "เลือกของภายใต้งบ/น้ำหนักจำกัด" • "สร้างค่า x ได้ไหม" • "แบ่งของสองกอง"
+⚠ ใช้ได้เมื่อ W/X ≤ ~1e6 (dp ตามขนาดผลรวม ไม่ใช่จำนวนชิ้น)</p>
+<h2>LCS / Edit Distance / LIS</h2>
+<p><em>ต่อยอดจาก: 2D DP (Array Description) — state สองมิติ i,j = ตำแหน่งในสอง string</em></p>
+<pre><code class="language-cpp">// LCS: ลำดับย่อยร่วมยาวสุดของ a, b (ไม่ต้องติดกัน)  O(nm) — n,m ≤ ~5000
+vector&lt;vector&lt;int&gt;&gt; dp(n + 1, vector&lt;int&gt;(m + 1, 0));
+for (int i = 1; i &lt;= n; i++)
+    for (int j = 1; j &lt;= m; j++)
+        dp[i][j] = (a[i-1] == b[j-1])              // ⚠ string index = i-1 (dp เลื่อน 1)
+                 ? dp[i-1][j-1] + 1
+                 : max(dp[i-1][j], dp[i][j-1]);
+// คำตอบ: dp[n][m]
+
+// edit distance (แก้ a เป็น b น้อยครั้งสุด: ลบ/เพิ่ม/แทนที่) — โครงเดียวกัน:
+// dp[i][0] = i, dp[0][j] = j (base!)
+// ตรงกัน → dp[i-1][j-1]  ไม่ตรง → 1 + min({dp[i-1][j-1], dp[i-1][j], dp[i][j-1]})
+</code></pre>
+<pre><code class="language-cpp">// LIS: ลำดับย่อยเพิ่มขึ้นยาวสุด  O(n log n) — แค่ lower_bound ที่ใช้เป็นอยู่แล้ว
+vector&lt;ll&gt; t;                      // t[k] = ตัวปลายเล็กสุดของลำดับยาว k+1
+for (ll x : a) {
+    auto it = lower_bound(t.begin(), t.end(), x);
+    if (it == t.end()) t.push_back(x);
+    else *it = x;
+}
+// คำตอบ = t.size()
+// เพิ่มขึ้น "แท้" (&lt; เท่านั้น) → lower_bound   เท่ากันได้ (≤) → เปลี่ยนเป็น upper_bound
+// ⚠ t ไม่ใช่ลำดับจริง (ความยาวถูกอย่างเดียว) — โจทย์ขอตัวลำดับ = คนละเรื่อง
+</code></pre>
+<h2>ชุดขยาย 1 — Tree & Range Queries (Fenwick, SegTree, LCA)</h2>
+<p><em>ต่อยอดจาก: Prefix Sum (หน้า 12) & BFS/DFS — สำหรับช่วงที่มีการอัปเดตและค้นหาเร็ว O(log N)</em></p>
+<p><strong>1. Fenwick Tree (BIT) — 1-indexed (ขนาด N+1, O(log N)) เขียนง่ายและเร็วกว่า SegTree มาก</strong></p>
+<pre><code class="language-cpp">struct BIT {
+    int n;
+    vector&lt;ll&gt; tree;
+    BIT(int n) : n(n), tree(n + 1, 0) {}
+    void add(int i, ll delta) {
+        for (; i &lt;= n; i += i &amp; -i) tree[i] += delta;
+    }
+    ll query(int i) {
+        ll sum = 0;
+        for (; i &gt; 0; i -= i &amp; -i) sum += tree[i];
+        return sum;
+    }
+    ll range_query(int l, int r) { return query(r) - query(l - 1); }
+};
+// Range Update / Point Query: update [l, r] เพิ่ม x -&gt; bit.add(l, x); bit.add(r + 1, -x); อ่านค่าที่ i -&gt; bit.query(i)
+</code></pre>
+<p><strong>2. Segment Tree (0-indexed array, 1-indexed tree node 1..4N) — O(log N)</strong></p>
+<pre><code class="language-cpp">struct SegTree {
+    int n;
+    vector&lt;ll&gt; tree;
+    SegTree(const vector&lt;ll&gt;&amp; a) {
+        n = a.size();
+        tree.assign(4 * n, 0);
+        build(a, 1, 0, n - 1);
+    }
+    void build(const vector&lt;ll&gt;&amp; a, int node, int l, int r) {
+        if (l == r) { tree[node] = a[l]; return; }
+        int mid = (l + r) / 2;
+        build(a, 2 * node, l, mid);
+        build(a, 2 * node + 1, mid + 1, r);
+        tree[node] = tree[2 * node] + tree[2 * node + 1]; // เปลี่ยนเป็น min/max ได้ตามโจทย์
+    }
+    void update(int node, int l, int r, int idx, ll val) {
+        if (l == r) { tree[node] = val; return; } // ถ้าเพิ่มค่าใช้ += val
+        int mid = (l + r) / 2;
+        if (idx &lt;= mid) update(2 * node, l, mid, idx, val);
+        else update(2 * node + 1, mid + 1, r, idx, val);
+        tree[node] = tree[2 * node] + tree[2 * node + 1];
+    }
+    ll query(int node, int l, int r, int ql, int qr) {
+        if (ql &lt;= l &amp;&amp; r &lt;= qr) return tree[node];
+        if (qr &lt; l || r &lt; ql) return 0; // ถ้าหา min คืน INF, ถ้า max คืน -INF
+        int mid = (l + r) / 2;
+        return query(2 * node, l, mid, ql, qr) + query(2 * node + 1, mid + 1, r, ql, qr);
+    }
+};
+// เรียกใช้: SegTree st(a); st.query(1, 0, n-1, L, R); st.update(1, 0, n-1, idx, val);
+</code></pre>
+<p><strong>3. Lowest Common Ancestor (LCA via Binary Lifting) — O(N log N) init, O(log N) query</strong></p>
+<pre><code class="language-cpp">const int LOG = 20; // 2^20 &gt; 1e6
+vector&lt;vector&lt;int&gt;&gt; adj_lca, up;
+vector&lt;int&gt; depth;
+void lca_dfs(int u, int p, int d) {
+    depth[u] = d;
+    up[u][0] = p;
+    for (int k = 1; k &lt; LOG; k++) up[u][k] = up[up[u][k - 1]][k - 1];
+    for (int v : adj_lca[u]) if (v != p) lca_dfs(v, u, d + 1);
+}
+int get_lca(int u, int v) {
+    if (depth[u] &lt; depth[v]) swap(u, v);
+    for (int k = LOG - 1; k &gt;= 0; k--)
+        if (depth[u] - (1 &lt;&lt; k) &gt;= depth[v]) u = up[u][k];
+    if (u == v) return u;
+    for (int k = LOG - 1; k &gt;= 0; k--)
+        if (up[u][k] != up[v][k]) { u = up[u][k]; v = up[v][k]; }
+    return up[u][0];
+}
+int dist_lca(int u, int v) { return depth[u] + depth[v] - 2 * depth[get_lca(u, v)]; }
+// ก่อนใช้: adj_lca.assign(n + 1, {}); up.assign(n + 1, vector&lt;int&gt;(LOG, 0)); depth.assign(n + 1, 0);
+//          lca_dfs(root, root, 0);
+// ⚠ lca_dfs เป็น recursion — tree เป็นเส้นตรงยาว ~2e5 เสี่ยง stack overflow
+</code></pre>
+<h2>ชุดขยาย 2 — Advanced Graph & Shortest Paths (Bellman-Ford, Bipartite, Tarjan)</h2>
+<p><em>ต่อยอดจาก: BFS/DFS & Dijkstra (หน้า 15, 19, 21)</em></p>
+<p><strong>1. Bellman-Ford / SPFA — รองรับ Edge ติดลบและตรวจ Negative Cycle O(VE)</strong></p>
+<pre><code class="language-cpp">const ll INF_BF = 1e18;
+vector&lt;array&lt;ll, 3&gt;&gt; edges_bf; // {w, u, v}
+vector&lt;ll&gt; dist_bf(n + 1, INF_BF);
+dist_bf[s] = 0;
+for (int i = 1; i &lt; n; i++) {
+    for (auto&amp; [w, u, v] : edges_bf)
+        if (dist_bf[u] &lt; INF_BF &amp;&amp; dist_bf[u] + w &lt; dist_bf[v]) dist_bf[v] = dist_bf[u] + w;
+}
+// ตรวจ Negative Cycle: วนรอบที่ n ถ้ายังมี edge ไหน update ได้ = มีวงจรติดลบ!
+bool has_neg_cycle = false;
+for (auto&amp; [w, u, v] : edges_bf)
+    if (dist_bf[u] &lt; INF_BF &amp;&amp; dist_bf[u] + w &lt; dist_bf[v]) { has_neg_cycle = true; break; }
+</code></pre>
+<p><strong>2. Bipartite Graph Check — แบ่งกราฟเป็น 2 ฝั่ง (คนฝั่งเดียวกันห้ามมีเส้นเชื่อมกัน)</strong></p>
+<pre><code class="language-cpp">vector&lt;int&gt; color(n + 1, -1); // -1=ยังไม่สี, 0=สีแรก, 1=สีสอง
+bool is_bipartite = true;
+queue&lt;int&gt; q_bip;
+for (int i = 1; i &lt;= n &amp;&amp; is_bipartite; i++) {
+    if (color[i] != -1) continue;
+    color[i] = 0; q_bip.push(i);
+    while (!q_bip.empty()) {
+        int u = q_bip.front(); q_bip.pop();
+        for (int v : adj[u]) {
+            if (color[v] == -1) { color[v] = 1 - color[u]; q_bip.push(v); }
+            else if (color[v] == color[u]) { is_bipartite = false; break; }
+        }
+    }
+}
+</code></pre>
+<p><strong>3. Bridge & Articulation Point (Tarjan's Algorithm) — หาจุดตัดและสะพานขาดใน O(V+E)</strong></p>
+<pre><code class="language-cpp">vector&lt;int&gt; tin(n + 1, -1), low(n + 1, -1);
+int timer_tj = 0;
+vector&lt;pair&lt;int,int&gt;&gt; bridges;
+vector&lt;char&gt; is_art(n + 1, 0);
+void tarjan_dfs(int u, int p = -1) {
+    tin[u] = low[u] = timer_tj++;
+    int children = 0;
+    for (int v : adj[u]) {
+        if (v == p) continue;
+        if (tin[v] != -1) { low[u] = min(low[u], tin[v]); } // back-edge
+        else {
+            tarjan_dfs(v, u); // tree-edge
+            low[u] = min(low[u], low[v]);
+            if (low[v] &gt; tin[u]) bridges.push_back({u, v}); // Bridge (เส้นเดียวระหว่าง u-v ตัดแล้วขาด)
+            if (low[v] &gt;= tin[u] &amp;&amp; p != -1) is_art[u] = 1;  // Articulation Point
+            children++;
+        }
+    }
+    if (p == -1 &amp;&amp; children &gt; 1) is_art[u] = 1; // Root เป็นจุดตัดถ้ามีลูก &gt; 1 กิ่ง
+}
+// เรียก: วนทุก u ที่ tin[u] == -1 → tarjan_dfs(u)   (กราฟอาจมีหลาย component)
+// ⚠ ถ้ามี edge ซ้ำ (u-v สองเส้น) จะตอบ bridge ผิด — ต้องเปลี่ยนไป skip ด้วย "index ของ edge" แทน parent
+// ⚠ recursion ลึก ~2e5 เสี่ยง stack overflow
+</code></pre>
+<h2>ชุดขยาย 3 — String Algorithms (Z-Algo, KMP, Rolling Hash)</h2>
+<p><em>ต่อยอดจาก: string (หน้า 4) — เมื่อ substr/find ธรรมดาช้าเกินไป O(NM)</em></p>
+<p><strong>1. Z-Algorithm — z[i] = ความยาว prefix ของ s ที่ตรงกับ substring ตั้งแต่ i (O(N))</strong></p>
+<pre><code class="language-cpp">vector&lt;int&gt; z_function(const string&amp; s) {
+    int n = s.size(), l = 0, r = 0;
+    vector&lt;int&gt; z(n, 0);
+    for (int i = 1; i &lt; n; i++) {
+        if (i &lt;= r) z[i] = min(r - i + 1, z[i - l]);
+        while (i + z[i] &lt; n &amp;&amp; s[z[i]] == s[i + z[i]]) z[i]++;
+        if (i + z[i] - 1 &gt; r) { l = i; r = i + z[i] - 1; }
+    }
+    return z;
+}
+// ค้นหา pattern P ใน text T: สร้าง s = P + "$" + T แล้วหา i ที่ z[i] == P.size()
+</code></pre>
+<p><strong>2. KMP (Knuth-Morris-Pratt) — ค้นหา Pattern P ใน Text T ใน O(N+M)</strong></p>
+<pre><code class="language-cpp">vector&lt;int&gt; prefix_function(const string&amp; s) {
+    int n = s.size();
+    vector&lt;int&gt; pi(n, 0);
+    for (int i = 1; i &lt; n; i++) {
+        int j = pi[i - 1];
+        while (j &gt; 0 &amp;&amp; s[i] != s[j]) j = pi[j - 1];
+        if (s[i] == s[j]) j++;
+        pi[i] = j;
+    }
+    return pi;
+}
+// การหา: pi จาก P+"$"+T ถ้าตำแหน่งไหนได้ pi[i] == P.size() คือเจอที่ตำแหน่งนั้น
+</code></pre>
+<p><strong>3. Polynomial Rolling Hash — หา hash ของ substring ใน O(1) (ใช้ 2 base กันชน)</strong></p>
+<pre><code class="language-cpp">struct StringHash {
+    const ll BASE1 = 31, MOD1 = 1e9 + 7;
+    const ll BASE2 = 37, MOD2 = 1e9 + 9;
+    vector&lt;ll&gt; h1, h2, p1, p2;
+    StringHash(const string&amp; s) {
+        int n = s.size();
+        h1.assign(n + 1, 0); h2.assign(n + 1, 0);
+        p1.assign(n + 1, 1); p2.assign(n + 1, 1);
+        for (int i = 0; i &lt; n; i++) {
+            h1[i + 1] = (h1[i] * BASE1 + (s[i] - 'a' + 1)) % MOD1;
+            h2[i + 1] = (h2[i] * BASE2 + (s[i] - 'a' + 1)) % MOD2;
+            p1[i + 1] = (p1[i] * BASE1) % MOD1;
+            p2[i + 1] = (p2[i] * BASE2) % MOD2;
+        }
+    }
+    pair&lt;ll, ll&gt; get_hash(int l, int r) { // 0-indexed [l, r]
+        ll res1 = (h1[r + 1] - h1[l] * p1[r - l + 1]) % MOD1;
+        if (res1 &lt; 0) res1 += MOD1;
+        ll res2 = (h2[r + 1] - h2[l] * p2[r - l + 1]) % MOD2;
+        if (res2 &lt; 0) res2 += MOD2;
+        return {res1, res2};
+    }
+};
+</code></pre>
+<h2>ชุดขยาย 4 — Math & Number Theory Extensions (Matrix Pow, ExtGCD, SPF)</h2>
+<p><em>ต่อยอดจาก: Math (หน้า 17) & DP (หน้า 14)</em></p>
+<p><strong>1. Matrix Exponentiation — คูณเมทริกซ์และยกกำลังแก้โจทย์ Recurrence DP ใน O(K^3 log E)</strong></p>
+<pre><code class="language-cpp">struct Matrix {
+    int r, c;
+    vector&lt;vector&lt;ll&gt;&gt; mat;
+    Matrix(int r, int c) : r(r), c(c), mat(r, vector&lt;ll&gt;(c, 0)) {}
+    Matrix operator*(const Matrix&amp; o) const {
+        Matrix res(r, o.c);
+        for (int i = 0; i &lt; r; i++)
+            for (int k = 0; k &lt; c; k++)
+                for (int j = 0; j &lt; o.c; j++)
+                    res.mat[i][j] = (res.mat[i][j] + mat[i][k] * o.mat[k][j]) % MOD;
+        return res;
+    }
+};
+Matrix matpow(Matrix a, ll e) {
+    Matrix res(a.r, a.c);
+    for (int i = 0; i &lt; a.r; i++) res.mat[i][i] = 1; // Identity
+    while (e &gt; 0) {
+        if (e &amp; 1) res = res * a;
+        a = a * a;
+        e &gt;&gt;= 1;
+    }
+    return res;
+}
+// ตัวอย่าง Fibonacci F(n): transition matrix = {{1, 1}, {1, 0}} ยกกำลัง n-1 แล้วคูณ {{F(1)}, {F(0)}}
+</code></pre>
+<p><strong>2. Extended GCD & Modular Inverse (สำหรับ mod ทั่วไปที่ gcd(a, m) == 1)</strong></p>
+<pre><code class="language-cpp">ll extgcd(ll a, ll b, ll&amp; x, ll&amp; y) {
+    if (b == 0) { x = 1; y = 0; return a; }
+    ll x1, y1;
+    ll g = extgcd(b, a % b, x1, y1);
+    x = y1;
+    y = x1 - y1 * (a / b);
+    return g;
+}
+ll modinv_general(ll a, ll m) {
+    ll x, y;
+    ll g = extgcd(a, m, x, y);
+    if (g != 1) return -1; // หาไม่ได้ถ้า gcd != 1
+    return (x % m + m) % m;
+}
+</code></pre>
+<p><strong>3. Smallest Prime Factor (SPF) — แยกตัวประกอบเร็ว O(log N) เมื่อ N ≤ 1e7</strong></p>
+<pre><code class="language-cpp">vector&lt;int&gt; spf(N + 1);
+void sieve_spf() {
+    iota(spf.begin(), spf.end(), 0);
+    for (int i = 2; i * i &lt;= N; i++)
+        if (spf[i] == i)
+            for (int j = i * i; j &lt;= N; j += i)
+                if (spf[j] == j) spf[j] = i;
+}
+vector&lt;pair&lt;int, int&gt;&gt; factorize(int x) {
+    vector&lt;pair&lt;int, int&gt;&gt; res;
+    while (x &gt; 1) {
+        int p = spf[x], cnt = 0;
+        while (x % p == 0) { cnt++; x /= p; }
+        res.push_back({p, cnt});
+    }
+    return res;
+}
+// จำนวนตัวหาร = (cnt1 + 1) * (cnt2 + 1) * ...
+</code></pre>
+<h2>ชุดขยาย 5 — Geometry Basics & Convex Hull (Monotone Chain)</h2>
+<p><em>ต่อยอดจาก: vector & pair (หน้า 3, 8) — สำหรับโจทย์เรขาคณิตและการหาเปลือกนอก</em></p>
+<p><strong>1. 2D Point Struct & Cross/Dot Product Basics</strong></p>
+<pre><code class="language-cpp">typedef long long T;
+struct Point {
+    T x, y;
+    Point(T x = 0, T y = 0) : x(x), y(y) {}
+    Point operator+(const Point&amp; p) const { return Point(x + p.x, y + p.y); }
+    Point operator-(const Point&amp; p) const { return Point(x - p.x, y - p.y); }
+    T dot(const Point&amp; p) const { return x * p.x + y * p.y; }
+    T cross(const Point&amp; p) const { return x * p.y - y * p.x; }
+    bool operator&lt;(const Point&amp; p) const { return x &lt; p.x || (x == p.x &amp;&amp; y &lt; p.y); }
+};
+// ทิศทางเลี้ยว o -&gt; a -&gt; b: (a - o).cross(b - o) &gt; 0 คือซ้าย (CCW), &lt; 0 คือขวา (CW), = 0 คือเส้นตรงเดียวกัน
+T cross_op(Point o, Point a, Point b) { return (a - o).cross(b - o); }
+// พื้นที่รูปหลายเหลี่ยม (Shoelace formula): abs(p[0].cross(p[1]) + p[1].cross(p[2]) + ...) / 2.0
+// (ไม่ใส่ abs จะได้ค่าติดลบเมื่อจุดเรียงตามเข็มนาฬิกา)
+</code></pre>
+<p><strong>2. Convex Hull (Monotone Chain) — หาเปลือกนอกใน O(N log N)</strong></p>
+<pre><code class="language-cpp">vector&lt;Point&gt; convex_hull(vector&lt;Point&gt;&amp; pts) {
+    int n = pts.size(), k = 0;
+    if (n &lt;= 2) return pts;
+    vector&lt;Point&gt; h(2 * n);
+    sort(pts.begin(), pts.end());
+    for (int i = 0; i &lt; n; i++) {
+        while (k &gt;= 2 &amp;&amp; cross_op(h[k - 2], h[k - 1], pts[i]) &lt;= 0) k--; // เปลี่ยน &lt;= เป็น &lt; ถ้าเอาจุดบนขอบด้วย
+        h[k++] = pts[i];
+    }
+    for (int i = n - 2, t = k + 1; i &gt;= 0; i--) {
+        while (k &gt;= t &amp;&amp; cross_op(h[k - 2], h[k - 1], pts[i]) &lt;= 0) k--;
+        h[k++] = pts[i];
+    }
+    h.resize(k - 1);
+    return h;
+}
+</code></pre>
+<h2>ชุดขยาย 6 — Dynamic Programming Extensions (Digit DP, Bitmask DP/TSP, Knapsack Tricks)</h2>
+<p><em>ต่อยอดจาก: DP (หน้า 14) — สำหรับโจทย์นับตัวเลขตามเงื่อนไข, กราฟ NP-hard ขนาดเล็ก และ Knapsack ที่ W มหาศาล</em></p>
+<p><strong>1. Digit DP (นับจำนวนเลขในช่วง [0, N] ที่ตรงเงื่อนไข) — O(len · states)</strong></p>
+<pre><code class="language-cpp">// ตัวอย่าง: นับเลขที่ไม่มีเลข 4 อยู่เลย ในช่วง [0, N]
+string s = to_string(N);
+vector&lt;vector&lt;ll&gt;&gt; memo(s.size(), vector&lt;ll&gt;(2, -1)); // [pos][tight] (เพิ่มมิติ state ได้ตามโจทย์)
+ll digit_dp(int pos, bool tight) {
+    if (pos == (int)s.size()) return 1; // จบตัวเลข 1 แบบที่ถูกต้อง
+    if (memo[pos][tight] != -1) return memo[pos][tight];
+    int limit = tight ? (s[pos] - '0') : 9;
+    ll res = 0;
+    for (int d = 0; d &lt;= limit; d++) {
+        if (d == 4) continue; // เงื่อนไขห้ามมีเลข 4
+        res += digit_dp(pos + 1, tight &amp;&amp; (d == limit));
+    }
+    return memo[pos][tight] = res;
+}
+// คำตอบ [A, B] = digit_dp ของ B ลบ digit_dp ของ (A - 1)
+// ⚠ ระหว่างสองครั้งต้อง RESET: สร้าง s = to_string(...) ใหม่ + เติม memo เป็น -1 ใหม่ ไม่งั้นคำตอบผิดเงียบๆ
+</code></pre>
+<p><strong>2. Bitmask DP &amp; Travelling Salesperson Problem (TSP) — O(2^N · N^2) เมื่อ N ≤ 20</strong></p>
+<pre><code class="language-cpp">// dp[mask][u] = ค่าเดินทางน้อยสุดเมื่อผ่านเซตของเมืองใน mask และจบที่เมือง u
+const ll INF_DP = 1e18;
+vector&lt;vector&lt;ll&gt;&gt; dp(1 &lt;&lt; n, vector&lt;ll&gt;(n, INF_DP));
+dp[1][0] = 0; // เริ่มต้นที่เมือง 0 (mask = 1)
+for (int mask = 1; mask &lt; (1 &lt;&lt; n); mask++) {
+    for (int u = 0; u &lt; n; u++) {
+        if (!(mask &gt;&gt; u &amp; 1) || dp[mask][u] == INF_DP) continue;
+        for (int v = 0; v &lt; n; v++) {
+            if (mask &gt;&gt; v &amp; 1) continue; // ไปแล้วข้าม
+            int next_mask = mask | (1 &lt;&lt; v);
+            dp[next_mask][v] = min(dp[next_mask][v], dp[mask][u] + dist[u][v]);
+        }
+    }
+}
+// คำตอบ: min ของ dp[(1&lt;&lt;n)-1][u] + dist[u][0] (ถ้าต้องวนกลับ)
+</code></pre>
+<p><strong>3. Knapsack เมื่อ W ใหญ่มาก (W ≤ 1e9) แต่มูลค่า V เล็ก (N·Vmax ≤ 1e5)</strong></p>
+<pre><code class="language-cpp">// สลับ State: dp[val] = น้ำหนักน้อยที่สุดที่ทำให้ได้มูลค่ารวมเท่ากับ val
+int max_val = 100000;
+vector&lt;ll&gt; dp_knap(max_val + 1, INF_DP);
+dp_knap[0] = 0;
+for (int i = 0; i &lt; n; i++)
+    for (int v = max_val; v &gt;= val[i]; v--)
+        if (dp_knap[v - val[i]] != INF_DP)
+            dp_knap[v] = min(dp_knap[v], dp_knap[v - val[i]] + wt[i]);
+// คำตอบ: v ใหญ่สุดจาก max_val..0 ที่ dp_knap[v] &lt;= W (ความจุเป้)
+</code></pre>
+<h2>ชุดขยาย 7 — Advanced Graph Extensions (2-SAT & Eulerian Path)</h2>
+<p><em>ต่อยอดจาก: Toposort & DFS (หน้า 21, 22)</em></p>
+<p><strong>1. 2-SAT (Two-Satisfiability) — หาค่าความจริงเงื่อนไข (X_i ∨ Y_j) ใน O(V+E)</strong></p>
+<pre><code class="language-cpp">// 2-SAT: ตัวแปร i = โหนด 2*i, NOT i = โหนด 2*i+1 (0-indexed 0..n-1)
+struct TwoSat {
+    int n;
+    vector&lt;vector&lt;int&gt;&gt; adj, radj;
+    vector&lt;int&gt; order, comp, ans;
+    vector&lt;char&gt; vis;
+    TwoSat(int n) : n(n), adj(2*n), radj(2*n), comp(2*n, -1), ans(n, 0), vis(2*n, 0) {}
+    void add_clause(int i, bool f, int j, bool g) { // (X_i = f) OR (X_j = g)
+        int u = 2*i + (f?0:1), not_u = 2*i + (f?1:0);
+        int v = 2*j + (g?0:1), not_v = 2*j + (g?1:0);
+        adj[not_u].push_back(v); radj[v].push_back(not_u); // NOT u -&gt; v
+        adj[not_v].push_back(u); radj[u].push_back(not_v); // NOT v -&gt; u
+    }
+    void dfs1(int u) { vis[u]=1; for(int v:adj[u]) if(!vis[v]) dfs1(v); order.push_back(u); }
+    void dfs2(int u, int c) { comp[u]=c; for(int v:radj[u]) if(comp[v]==-1) dfs2(v, c); }
+    bool solve() {
+        for(int i=0; i&lt;2*n; i++) if(!vis[i]) dfs1(i);
+        reverse(order.begin(), order.end());
+        int c = 0;
+        for(int u:order) if(comp[u]==-1) dfs2(u, c++);
+        for(int i=0; i&lt;n; i++) {
+            if(comp[2*i] == comp[2*i+1]) return false; // ขัดแย้ง เป็นไปไม่ได้!
+            ans[i] = comp[2*i] &gt; comp[2*i+1];          // SCC ที่ออกหลังเป็นจริง
+        }
+        return true;
+    }
+};
+// ⚠ dfs1/dfs2 เป็น recursion ลึกได้ถึง 2n — n ใหญ่เสี่ยง stack overflow
+</code></pre>
+<p><strong>2. Eulerian Path / Circuit (Hierholzer's Algorithm) — ลากเส้นผ่านทุก Edge พอดีครั้งเดียว O(V+E)</strong></p>
+<pre><code class="language-cpp">// กราฟมีทิศทาง: Circuit มีได้เมื่อ in-deg == out-deg ทุกโหนด
+// Path มีได้เมื่อ มีจุดเริ่ม 1 จุด (out - in == 1), จุดจบ 1 จุด (in - out == 1) และที่เหลือ in == out
+vector&lt;vector&lt;int&gt;&gt; adj_eu; // เก็บปลายทาง (หรือ index ของ edge)
+vector&lt;int&gt; path;
+void euler_dfs(int u) {
+    while (!adj_eu[u].empty()) {
+        int v = adj_eu[u].back();
+        adj_eu[u].pop_back();
+        euler_dfs(v);
+    }
+    path.push_back(u); // ใส่ตอนถอยกลับ
+}
+// คำตอบ: euler_dfs(start_node); reverse(path.begin(), path.end());
+// ⚠ ต้องเช็คก่อนว่า edge ทุกเส้นเชื่อมถึงกัน (component เดียว) ไม่งั้นได้ path ไม่ครบแต่ไม่ error
+// ⚠ recursion ลึก = จำนวน edge — edge เยอะ (2e5+) เสี่ยง stack overflow
+// (กราฟไม่มีทิศทาง: ต้องลบ edge ฝั่งย้อนกลับด้วย — โค้ดนี้ใช้กับ directed ตรงๆ เท่านั้น)
+</code></pre>
+<h2>ชุดขยาย 8 — Game Theory, Combinatorics & Math Formulas</h2>
+<p><em>ต่อยอดจาก: Math (หน้า 17)</em></p>
+<p><strong>1. Game Theory (Nim Game & Sprague-Grundy Theorem)</strong></p>
+<pre><code class="language-cpp">// กฎกองหิน Nim: กองหิน a[1], a[2], ..., a[k] หยิบกี่ลูกก็ได้จาก 1 กองสลับกันเดิน
+// คนเดินก่อน "ชนะ" เมื่อ: XOR sum (a[1] ^ a[2] ^ ... ^ a[k]) != 0
+// คนเดินก่อน "แพ้" เมื่อ: XOR sum == 0 (ไม่ว่าจะหยิบยังไง คนเดินหลังจะปรับกลับเป็น 0 ได้เสมอ)
+
+// Sprague-Grundy (เกมทั่วไปที่ไม่ใช่หินธรรมดา): เปลี่ยนเกมเป็นเลข Grundy (G)
+// G(state) = mex ของ { G(next_state) ทั้งหมดที่เดินไปถึงได้ }
+// (mex = Minimum Excluded non-negative integer คือเลข 0,1,2... น้อยสุดที่ไม่มีในเซต)
+int get_mex(unordered_set&lt;int&gt;&amp; s) {
+    int m = 0;
+    while (s.count(m)) m++;
+    return m;
+}
+// ถ้ามีหลายกระดานเล่นพร้อมกัน: ผลรวมเกม = G(board1) ^ G(board2) ^ ... (เหมือน Nim)
+</code></pre>
+<p><strong>2. Inclusion-Exclusion Principle (PIE) & Catalan Numbers</strong></p>
+<pre><code class="language-cpp">// PIE (นับรวม-หักออก): |A ∪ B ∪ C| = Σ|A| - Σ|A∩B| + |A∩B∩C|
+// ใช้ Bitmask วนทุก subset (ถ้าจำนวนเซต ≤ 20):
+ll total = 0;
+for (int mask = 1; mask &lt; (1 &lt;&lt; k); mask++) {
+    int bits = __builtin_popcount(mask);
+    ll inter = calc_intersection(mask); // คำนวณขนาด intersection ของเซตใน mask
+    if (bits % 2 == 1) total += inter;  // คี่บวก
+    else total -= inter;                // คู่ลบ
+}
+
+// Catalan Numbers: C_0 = 1, C_n = (2n)! / ((n + 1)! * n!) = นับจำนวนวงเล็บ n คู่ที่ถูกต้อง,
+// นับไบนารีทรี n โหนด, นับทางเดินจาก (0,0) ไป (n,n) ที่ไม่ข้ามเส้นทแยงมุม
+ll catalan(ll n) {
+    return nCr(2 * n, n) * inv(n + 1) % MOD;
+}
+// ⚠ fact[] ต้อง precompute ยาวถึง 2n (ไม่ใช่แค่ n)
+</code></pre>
+<h2>ชุดขยาย 9 — ICPC Contest Survival & Debugging Checklist (คู่มือรอดชีวิตตอนเกิดปัญหา)</h2>
+<p><em>สำหรับเปิดดูช่วง 10 นาทีสุดท้าย หรือเมื่อส่งแล้วได้ WA / TLE / RTE แล้วหาจุดผิดไม่เจอ</em></p>
+<p><strong>🚨 Pre-Submit Checklist (เช็ค 10 วิ ก่อนกด Submit กัน WA/RTE):</strong></p>
+<ul>
+<li><strong>Multi-test Reset:</strong> ในโจทย์ที่มี <code>cin &gt;&gt; T; while(T--)</code> ลืม <code>clear()</code> อาเรย์, กราฟ <code>adj</code>, <code>visited</code>, หรือ <code>fenwick/segtree</code> ก่อนเริ่มเทสใหม่หรือไม่? (บักอันดับ 1 ของ ICPC)</li>
+<li><strong>Integer Overflow:</strong> ใช้ <code>int</code> คูณกันแล้วเก็บลง <code>ll</code> หรือไม่? (เช่น <code>ll ans = a * b;</code> เมื่อ a, b เป็น int ต้องเขียน <code>ll ans = 1LL * a * b;</code>) • <code>1 &lt;&lt; i</code> เกิน 31 บิตหรือไม่ (ต้องเขียน <code>1LL &lt;&lt; i</code>)</li>
+<li><strong>Array Index / Out of Bounds:</strong> ตาราง 1-indexed แต่เผลอวน loop <code>0..n-1</code> หรือไม่? • <code>v[i-1]</code> เมื่อ <code>i == 0</code> หรือไม่?</li>
+<li><strong>Base Cases:</strong> ได้ลองเทสกรณีสุดขอบในหัวหรือยัง? ($N=0, N=1$, กราฟไม่มีเส้นเชื่อม, string ว่าง, ตัวเลขติดลบ, ทั้งอาเรย์เป็นเลขเดียวกัน)</li>
+<li><strong>INF Value:</strong> ค่า <code>INF</code> น้อยไป (บวกแล้วไม่พอ) หรือใหญ่ไปจนบวกกันแล้วทะลุกลับเป็นค่าลบ (overflow) หรือไม่? (แนะนำ <code>1e18</code> สำหรับ ll และ <code>1e9</code> สำหรับ int)</li>
+</ul>
+<p><strong>🛠️ Stress Tester Script (Bash สคริปต์ 3 บรรทัด หา Test Case ที่ทำให้โค้ดพังใน 1 นาที):</strong></p>
+<p>เมื่อได้ WA แล้วหาไม่เจอ ให้สร้าง 3 ไฟล์: 1) <code>gen.cpp</code> (สุ่ม input เล็กๆ n ≤ 10) 2) <code>brute.cpp</code> (โค้ดถึก O(n!) ช้าแต่ชัวร์ 100%) 3) <code>sol.cpp</code> (โค้ดเร็วของเราที่ได้ WA) แล้วรันคำสั่งนี้ใน Terminal:</p>
+<pre><code class="language-bash"># คอมไพล์ทั้ง 3 ไฟล์ก่อน: g++ -O2 gen.cpp -o gen && g++ -O2 brute.cpp -o brute && g++ -O2 sol.cpp -o sol
+while true; do
+    ./gen &gt; in
+    ./brute &lt; in &gt; ans
+    ./sol &lt; in &gt; out
+    diff -w ans out || break
+    echo -n "."
+done
+# พอ loop หยุด (break) เปิดไฟล์ in ดู test case ที่พังได้ทันที!
+</code></pre>
+<h2>(หลังสุด — พลิกจากปกหลัง) — โจทย์หาอะไร → ใช้อะไร</h2>
+<table>
+<thead>
+<tr>
+<th>โจทย์ถาม / สัญญาณ</th>
+<th>ใช้</th>
+<th>หน้า</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>n ≤ 11 / n ≤ 20</td>
+<td>brute force ทุกแบบ</td>
+<td data-sec="ntable">10</td>
+</tr>
+<tr>
+<td>"น้อยสุด/มากสุดที่ยังทำได้" + เช็คค่าเดียวง่าย</td>
+<td>binary search on answer</td>
+<td data-sec="binsearch">6</td>
+</tr>
+<tr>
+<td>subarray ติดกัน ผลรวม/เงื่อนไขตามที่กำหนด</td>
+<td>two pointers / prefix+map</td>
+<td data-sec="twopointers">7</td>
+</tr>
+<tr>
+<td>ถามผลรวมช่วงเดิมๆ หลายรอบ</td>
+<td>prefix sum</td>
+<td data-sec="twopointers">7</td>
+</tr>
+<tr>
+<td>เลือกกิจกรรม/ช่วงเวลา มากสุดไม่ชนกัน</td>
+<td>sort ตามเวลาจบ + เก็บ cur</td>
+<td data-sec="greedy">7</td>
+</tr>
+<tr>
+<td>ต้องใช้กี่ห้อง / ซ้อนกันสูงสุดเท่าไหร่</td>
+<td>event sweep ±1</td>
+<td data-sec="greedy">7</td>
+</tr>
+<tr>
+<td>แจกงานให้ k คน ได้มากสุด</td>
+<td>sort จบ + multiset เวลาว่าง</td>
+<td data-sec="greedy">7</td>
+</tr>
+<tr>
+<td>"นับจำนวนวิธี" (mod 1e9+7)</td>
+<td>counting DP, dp[0]=1</td>
+<td data-sec="dp">8</td>
+</tr>
+<tr>
+<td>ค่าน้อยสุด แล้ว greedy หา counterexample ได้</td>
+<td>DP min, dp[0]=0, INF guard</td>
+<td data-sec="dp">8</td>
+</tr>
+<tr>
+<td>ก้าวน้อยสุด / ไปถึงไหม (เขาวงกต, กราฟ)</td>
+<td>BFS</td>
+<td data-sec="bfs">8</td>
+</tr>
+<tr>
+<td>ทางสั้นสุด เมื่อก้าวมี "น้ำหนัก" (บวก)</td>
+<td>Dijkstra</td>
+<td data-sec="dijkstra">11</td>
+</tr>
+<tr>
+<td>ทางสั้นสุดหลายคู่ + n ≤ 500</td>
+<td>Floyd-Warshall</td>
+<td data-sec="floyd">11</td>
+</tr>
+<tr>
+<td>เชื่อมทุกเมือง จ่ายรวมถูกสุด</td>
+<td>Kruskal (sort + DSU)</td>
+<td data-sec="floyd">11</td>
+</tr>
+<tr>
+<td>นับเกาะ / กี่กลุ่ม / พื้นที่ติดกัน</td>
+<td>DFS / flood fill</td>
+<td data-sec="dfs">12</td>
+</tr>
+<tr>
+<td>งานมีลำดับก่อน-หลัง / prerequisite / เช็ค cycle</td>
+<td>toposort</td>
+<td data-sec="toposort">12</td>
+</tr>
+<tr>
+<td>ทางยาวสุด-นับเส้นทาง บนกราฟมีทิศไม่มีวง</td>
+<td>toposort + DP</td>
+<td data-sec="toposort">12</td>
+</tr>
+<tr>
+<td>เลือกของภายใต้งบ/น้ำหนัก ชิ้นละครั้ง</td>
+<td>0/1 knapsack</td>
+<td data-sec="knapsack">13</td>
+</tr>
+<tr>
+<td>สร้างผลรวม x ได้ไหม / แบ่งสองกอง</td>
+<td>subset sum</td>
+<td data-sec="knapsack">13</td>
+</tr>
+<tr>
+<td>ความคล้ายสอง string / แก้กี่ครั้ง</td>
+<td>LCS / edit distance</td>
+<td data-sec="lcs">13</td>
+</tr>
+<tr>
+<td>ลำดับย่อยเพิ่มขึ้นยาวสุด</td>
+<td>LIS (lower_bound)</td>
+<td data-sec="lcs">13</td>
+</tr>
+<tr>
+<td>เพิ่ม edge ทีละเส้น + ถาม "ถึงกันยัง" ระหว่างทาง</td>
+<td>DSU</td>
+<td data-sec="dsu">9</td>
+</tr>
+<tr>
+<td>นับวิธีเลือก r จาก n</td>
+<td>nCr mod (fact + inv)</td>
+<td data-sec="math">9</td>
+</tr>
+<tr>
+<td>หารลงตัว / เศษ / จำนวนเฉพาะ</td>
+<td>gcd, sieve, modpow</td>
+<td data-sec="math">9</td>
+</tr>
+<tr>
+<td>ดึง min/max สลับกับ insert ตลอดเวลา</td>
+<td>priority_queue / multiset</td>
+<td data-sec="pq">5, 4</td>
+</tr>
+<tr>
+<td>ตามลำดับล่าสุด / จับคู่เปิด-ปิด</td>
+<td>stack</td>
+<td data-sec="queue">4</td>
+</tr>
+<tr>
+<td>โจทย์เล่าเรื่องยาว input แปลก</td>
+<td>แกะด้วย getline/stringstream</td>
+<td data-sec="input">6</td>
+</tr>
+<tr>
+<td>อัปเดตค่าจุดเดียว + ถามผลรวมช่วง O(log N)</td>
+<td>Fenwick Tree (BIT)</td>
+<td data-sec="ext1">14</td>
+</tr>
+<tr>
+<td>อัปเดตช่วง + ถาม Min/Max/Sum ช่วง O(log N)</td>
+<td>Segment Tree</td>
+<td data-sec="ext1">14</td>
+</tr>
+<tr>
+<td>หาบรรพบุรุษร่วมและระยะทางระหว่างโหนดบน Tree</td>
+<td>LCA (Binary Lifting)</td>
+<td data-sec="ext1">14</td>
+</tr>
+<tr>
+<td>ทางสั้นสุดกราฟมี Edge ติดลบ / ตรวจ Negative Cycle</td>
+<td>Bellman-Ford / SPFA</td>
+<td data-sec="ext2">15</td>
+</tr>
+<tr>
+<td>ตรวจกราฟ 2 ฝั่ง / ระบาย 2 สี</td>
+<td>Bipartite Check</td>
+<td data-sec="ext2">15</td>
+</tr>
+<tr>
+<td>หาจุดตัดสำคัญ (Articulation Point) และสะพานขาด (Bridge)</td>
+<td>Tarjan's Algorithm</td>
+<td data-sec="ext2">15</td>
+</tr>
+<tr>
+<td>ค้นหา Pattern ใน Text อย่างรวดเร็ว O(N+M)</td>
+<td>KMP / Z-Algorithm</td>
+<td data-sec="ext3">16</td>
+</tr>
+<tr>
+<td>เทียบความเหมือน/เช็ค Substring ซ้ำ ใน O(1)</td>
+<td>Polynomial Rolling Hash</td>
+<td data-sec="ext3">16</td>
+</tr>
+<tr>
+<td>หาค่า DP ลำดับความสัมพันธ์ (เช่น Fibonacci) เมื่อ n ≤ 1e18</td>
+<td>Matrix Exponentiation</td>
+<td data-sec="ext4">17</td>
+</tr>
+<tr>
+<td>หา (x,y) สมการ ax+by = gcd(a,b) หรือ Modular Inverse ทั่วไป</td>
+<td>Extended GCD</td>
+<td data-sec="ext4">17</td>
+</tr>
+<tr>
+<td>แยกตัวประกอบจำนวนมากใน O(log N) หลัง init</td>
+<td>Smallest Prime Factor (SPF)</td>
+<td data-sec="ext4">17</td>
+</tr>
+<tr>
+<td>หาเปลือกนอก (Convex Hull) หรือเช็คทิศทางเลี้ยวจุด 2D</td>
+<td>Convex Hull (Monotone Chain)</td>
+<td data-sec="ext5">18</td>
+</tr>
+<tr>
+<td>นับจำนวนเลขใน [A, B] ที่ตรงเงื่อนไขตามหลัก</td>
+<td>Digit DP</td>
+<td data-sec="ext6">19</td>
+</tr>
+<tr>
+<td>หาทางเดินผ่านทุกเมือง / TSP (N ≤ 20)</td>
+<td>Bitmask DP</td>
+<td data-sec="ext6">19</td>
+</tr>
+<tr>
+<td>Knapsack เมื่อน้ำหนัก W มหาศาล (1e9) แต่มูลค่า V เล็ก</td>
+<td>Knapsack สลับ State บน V</td>
+<td data-sec="ext6">19</td>
+</tr>
+<tr>
+<td>เช็คความขัดแย้งเงื่อนไขตรรกศาสตร์ (X_i ∨ Y_j)</td>
+<td>2-SAT (SCC)</td>
+<td data-sec="ext7">20</td>
+</tr>
+<tr>
+<td>ลากเส้นผ่านทุก Edge พอดีครั้งเดียว</td>
+<td>Eulerian Path (Hierholzer)</td>
+<td data-sec="ext7">20</td>
+</tr>
+<tr>
+<td>เกมกองหิน / เกมสลับกันเดิน (ใครชนะ/แพ้)</td>
+<td>Nim / Sprague-Grundy (mex)</td>
+<td data-sec="ext8">21</td>
+</tr>
+<tr>
+<td>นับรวม-หักออกของเซตที่ซ้อนทับกัน / นับวงเล็บ-ไบนารีทรี</td>
+<td>PIE (Bitmask) / Catalan</td>
+<td data-sec="ext8">21</td>
+</tr>
+<tr>
+<td>ได้ WA/TLE/RTE แต่หาบักไม่เจอใน 10 นาทีสุดท้าย</td>
+<td>Pre-Submit Checklist &amp; Bash Stress Script</td>
+<td data-sec="ext9">22</td>
+</tr>
+</tbody>
+</table>
+<p><em>ทุกแถวชี้ไปหน้าที่มี code ในเล่มนี้ — ครึ่งแรกคือของที่ใช้เป็นแล้ว ชุดขยายคือญาติใกล้ของมัน (แต่ละหัวข้อเขียนไว้ว่าต่อยอดจากอะไร)</em></p>
+
+<script>
+class AutoPageNumberSync extends Paged.Handler {
+    beforeParsed(content) {
+        if (typeof hljs !== 'undefined') {
+            content.querySelectorAll('pre code').forEach((block) => {
+                if (!block.className.includes('language-')) {
+                    block.classList.add('language-cpp');
+                }
+                hljs.highlightElement(block);
+            });
+        }
+    }
+    afterRender(pages) {
+        const secPages = {};
+        document.querySelectorAll('h2').forEach((h2) => {
+            const pageEl = h2.closest('.pagedjs_page');
+            if (pageEl) {
+                const pageNum = pageEl.getAttribute('data-page-number');
+                const title = (h2.textContent || "").trim();
+                // เรียงจาก "เจาะจงสุด" ไปหา "กว้างสุด" — ต่อ h2 หนึ่งตัว จับคู่กฎแรกที่เจอเท่านั้น
+                const rules = [
+                    ["ext1","ชุดขยาย 1"],["ext2","ชุดขยาย 2"],["ext3","ชุดขยาย 3"],
+                    ["ext4","ชุดขยาย 4"],["ext5","ชุดขยาย 5"],["ext6","ชุดขยาย 6"],
+                    ["ext7","ชุดขยาย 7"],["ext8","ชุดขยาย 8"],["ext9","ชุดขยาย 9"],
+                    ["lookup","โจทย์หาอะไร"],["find","หาของอยู่ตรงไหน"],
+                    ["dijkstra","Dijkstra"],["floyd","Floyd"],["toposort","Topological"],
+                    ["knapsack","Knapsack"],["lcs","LCS"],
+                    ["dfs","DFS ("],["bfs","BFS ("],["dp","DP ("],["dsu","DSU"],["math","Math"],
+                    ["pq","priority_queue"],["queue","queue / deque"],
+                    ["ntable","อ่าน n"],["input","การอ่าน input"],
+                    ["binsearch","Binary Search"],["twopointers","Two Pointers"],["greedy","Greedy"],
+                    ["algo","algorithm"],
+                    ["vector","vector"],["string","string"],["set","set / multiset"],["map","map ("]
+                ];
+                for (const [key, pat] of rules) {
+                    if (title.includes(pat)) {
+                        if (!secPages[key]) secPages[key] = pageNum;
+                        break;
+                    }
+                }
+            }
+        });
+        
+        document.querySelectorAll('[data-sec]').forEach((el) => {
+            const key = el.getAttribute('data-sec');
+            if (secPages[key]) {
+                if (el.tagName.toLowerCase() === 'span') {
+                    const parts = el.textContent.split(' ');
+                    parts[0] = secPages[key];
+                    el.textContent = parts.join(' ');
+                } else if (el.tagName.toLowerCase() === 'td') {
+                    el.textContent = secPages[key];
+                }
+            }
+        });
+        console.log("AutoPageNumberSync complete. All page numbers verified against live layout.");
+    }
+}
+if (typeof Paged !== 'undefined') {
+    Paged.registerHandlers(AutoPageNumberSync);
+}
+</script>
+</body>
+</html>

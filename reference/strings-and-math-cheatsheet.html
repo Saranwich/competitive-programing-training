@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strings &amp; Contest Math Cheat Sheet</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<p class="kicker">Reference · Print me · Contest desk</p>
+<h1>Strings &amp; Contest Math</h1>
+<p class="subtitle">ICPC problems wrap the real question in a story with text input. This is the grab-bag of parsing and number tricks to get past the wrapper fast.</p>
+
+<div class="callout">
+<strong>The one idea.</strong> Parsing is not the problem — it's the <em>doorway</em>. Read the input into clean variables first, then solve. Most string pain in C++ is one trap: mixing <code>cin &gt;&gt;</code> with <code>getline</code>. Learn that one and the rest is <code>substr</code>, <code>find</code>, and a <code>stringstream</code>.
+</div>
+
+<h2>Part A — Reading text input</h2>
+
+<h3>The #1 trap: getline after cin &gt;&gt;</h3>
+<p><code>cin &gt;&gt; x</code> leaves the newline <code>\n</code> in the buffer. The next <code>getline</code> reads that empty leftover, not your line. Fix: eat the newline first.</p>
+<pre><code>int n; cin &gt;&gt; n;
+cin.ignore();              // throw away the leftover '\n'
+string line;
+getline(cin, line);        // now reads the real line
+</code></pre>
+<p>Rule of thumb: <strong>never mix</strong> <code>&gt;&gt;</code> and <code>getline</code> unless you put <code>cin.ignore()</code> between them.</p>
+
+<h3>Read a whole line, then split into tokens</h3>
+<pre><code>string line; getline(cin, line);
+stringstream ss(line);          // #include &lt;sstream&gt;
+string tok;
+vector&lt;string&gt; parts;
+while (ss &gt;&gt; tok) parts.push_back(tok);   // splits on whitespace
+// numbers on one line of unknown count:
+int x; vector&lt;int&gt; nums;
+stringstream ns(line);
+while (ns &gt;&gt; x) nums.push_back(x);
+</code></pre>
+
+<h3>Split on a delimiter (e.g. commas)</h3>
+<pre><code>stringstream ss(line); string field;
+while (getline(ss, field, ',')) { /* field = one CSV cell */ }
+</code></pre>
+
+<h2>Part B — String surgery (std::string)</h2>
+<table>
+<tr><th>Goal</th><th>Code (<code>s</code> is a string)</th><th>Notes</th></tr>
+<tr><td>length</td><td><code>s.size()</code></td><td>returns <em>unsigned</em> — cast to <code>int</code> before subtracting</td></tr>
+<tr><td>substring</td><td><code>s.substr(pos, len)</code></td><td><code>len</code> optional = to end</td></tr>
+<tr><td>find text</td><td><code>s.find("ab")</code></td><td>returns index, or <code>string::npos</code> if absent</td></tr>
+<tr><td>char at i</td><td><code>s[i]</code></td><td>it's a <code>char</code> — compare with <code>'a'</code></td></tr>
+<tr><td>append</td><td><code>s += t;</code> / <code>s.push_back(c)</code></td><td>O(1) amortized</td></tr>
+<tr><td>reverse</td><td><code>reverse(s.begin(), s.end())</code></td><td>&lt;algorithm&gt;</td></tr>
+<tr><td>sort chars</td><td><code>sort(s.begin(), s.end())</code></td><td>anagram key</td></tr>
+<tr><td>count a char</td><td><code>count(s.begin(), s.end(), 'a')</code></td><td>O(n)</td></tr>
+<tr><td>string→int</td><td><code>stoll(s)</code></td><td><code>stoi</code> overflows past ~2·10⁹ — prefer <code>stoll</code></td></tr>
+<tr><td>int→string</td><td><code>to_string(x)</code></td><td></td></tr>
+</table>
+
+<h3>Char tricks (letters &amp; digits are numbers)</h3>
+<pre><code>c - '0'            // digit char '7' -> int 7
+c - 'a'            // 'c' -> 2   (index in alphabet)
+'a' + k            // int k -> letter (cast to char to print)
+isdigit(c), isalpha(c), islower(c), toupper(c)   // &lt;cctype&gt;
+</code></pre>
+<div class="callout">
+<strong>Frequency counting.</strong> For lowercase letters, skip the map — use <code>int cnt[26]={};</code> and <code>cnt[c-'a']++</code>. Faster, and anagram/palindrome checks fall right out.
+</div>
+
+<h2>Part C — Contest math you actually use</h2>
+
+<h3>GCD / LCM (built in since C++17)</h3>
+<pre><code>__gcd(a, b);                 // or std::gcd(a,b) in &lt;numeric&gt;
+ll lcm = a / __gcd(a,b) * b; // divide BEFORE multiply — avoids overflow
+</code></pre>
+
+<h3>Fast power &amp; modular power</h3>
+<pre><code>const ll MOD = 1e9 + 7;
+ll modpow(ll b, ll e, ll m){
+    ll r = 1; b %= m;
+    while (e &gt; 0){
+        if (e &amp; 1) r = r * b % m;
+        b = b * b % m;
+        e &gt;&gt;= 1;
+    }
+    return r;
+}
+</code></pre>
+<p>Modular inverse (only when <code>m</code> is prime, like 1e9+7): <code>inv(a) = modpow(a, m-2, m)</code>. Use it to divide under a mod.</p>
+
+<h3>Sieve of Eratosthenes (primes up to N)</h3>
+<pre><code>vector&lt;bool&gt; isComp(N+1, false);
+for (int i = 2; (ll)i*i &lt;= N; i++)
+    if (!isComp[i])
+        for (int j = i*i; j &lt;= N; j += i) isComp[j] = true;
+// isComp[k]==false &amp;&amp; k&gt;=2  =&gt;  k is prime
+</code></pre>
+
+<h3>nCr mod p (small n, or precomputed factorials)</h3>
+<pre><code>// one-off, n up to ~1e6: precompute factorials once
+vector&lt;ll&gt; f(N+1); f[0]=1;
+for (int i=1;i&lt;=N;i++) f[i]=f[i-1]*i%MOD;
+ll nCr(int n,int r){
+    if (r&lt;0||r&gt;n) return 0;
+    return f[n] * modpow(f[r],MOD-2,MOD) %MOD * modpow(f[n-r],MOD-2,MOD) %MOD;
+}
+</code></pre>
+
+<h2>Overflow — the recurring killer</h2>
+<table>
+<tr><th>Situation</th><th>Guard</th></tr>
+<tr><td>sum/product of many values</td><td>use <code>ll</code>; a·b with a,b ~1e9 overflows <code>int</code></td></tr>
+<tr><td><code>a * b</code> both ~1e9 under a mod</td><td><code>ll</code> is fine (1e18 &lt; 9.2e18); above that use <code>__int128</code></td></tr>
+<tr><td><code>i*i</code> in a loop bound</td><td>cast: <code>(ll)i*i</code></td></tr>
+<tr><td>triangular / factorial sums</td><td><code>ll</code> or mod immediately</td></tr>
+</table>
+
+<div class="callout">
+<strong>Tie to today's leak.</strong> A story problem hides the question — so read the input format twice and hand-run sample #1 before coding (see <a href="../lessons/0001-constraints-to-complexity.html">the plan gate</a>). Parsing tools get you to the door faster; they don't tell you which door.
+</div>
+
+<p><strong>Primary source.</strong> Strings/IO: <a href="https://en.cppreference.com/w/cpp/string/basic_string">cppreference — std::string</a>. Number theory: <a href="https://cp-algorithms.com/algebra/binary-exp.html">cp-algorithms — binary exponentiation</a> and its algebra section.</p>
+
+<p><em>Stuck on a parse or a math identity mid-practice? Ask your teacher (me) — that's what I'm here for.</em></p>
+
+<footer><a href="training-plan.html">10-day plan</a> · <a href="cpp-stl-cheatsheet.html">STL</a> · <a href="complexity-cheatsheet.html">complexity</a> · <a href="two-pointers-cheatsheet.html">two pointers</a></footer>
+</body>
+</html>

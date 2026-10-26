@@ -21,3 +21,6 @@ ICPC Reference Document.pdf
 # MISSION.md, NOTES.md, RESOURCES.md, assets/) is intentionally TRACKED —
 # this repo is the record of how the CP journey was self-taught.
 ICPC Reference Document.md
+
+# Personal local-only files (roadmap etc.)
+local/
